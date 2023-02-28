@@ -5,33 +5,64 @@ from google.cloud import storage
 
 class Backend:
 
-    def __init__(self):
-        # Instantiates a client
-        storage_client = storage.Client()
-        # The name for the new bucket
-        bucket_name1 = "group_wiki_content"
-        bucket_name2 = "users_and_passwords"
+    def __init__(self, opener = open):
+        self.writeBucket =opener
+        self.readBucket =opener
+        self.storage_client = storage.Client()
+        
+        self.bucketName_content = "group_wiki_content"
+        self.bucketName_users = "users_and_passwords"
 
         #Creating the buckets
         #The bucket already exists, it just needs a name
-        self.bucket = storage_client.bucket(bucket_name1)
-        self.bucket = storage_client.bucket(bucket_name2)
+        self.bucket_content = self.storage_client.bucket(self.bucketName_content)
+        self.bucket_users = self.storage_client.bucket(self.bucketName_users)
         
     def get_wiki_page(self, name):
-        pass
+        blob = self.bucket_content.blob(self.bucketName_content+"/"+name)
+        with blob.open("r") as f:
+            print(f.read())
 
     def get_all_page_names(self):
-        pass
+        blobs = self.bucket_content.list_blobs(self.bucketName_content)        
+        for blob in blobs:
+            print(blob.name)
 
-    def upload(self):
-        pass
+    def upload(self, content, name):  
+        """Uploads content into the group_wiki_content bucket
 
-    def sign_up(self):
-        pass
+        It should be able to store text and pictures
+        Attributes
+            content: 
+        """  
+        #The blob will be the name of the object the bucket will use to identify it
+        blob = self.bucket_content.blob(self.bucketName_content+"/"+name)
 
-    def sign_in(self):
-        pass
+        print(f"Bucket {self.bucketName_content} created.")
+        with blob.open("w") as f:
+            print(f"Bucket {self.bucketName_content} created.")
+            f.write(content)        
+        print(f"Bucket {self.bucketName_content} created.")
 
-    def get_image(self):
-        pass
+    def sign_up(self, username, password):
+        blob = self.bucket_users.blob(self.bucketName_users+"/"+username)
+        with blob.open("w") as f:
+            f.write(password)
+
+    def sign_in(self, username, password):
+        blob = self.bucket_content.blob(self.bucketName_content+"/"+username)
+        matched = False
+        with blob.open("r") as f:
+            retrievedPassword = f.read()
+            print(retrievedPassword)
+            if retrievedPassword is password:
+                matched = True
+        return matched
+
+    def get_image(self, imageName):
+        blob = self.bucket_content.blob(self.bucketName_content+"/"+imageName)
+        image = None
+        with blob.open("r") as f:
+            image = f.read()
+        return image
 

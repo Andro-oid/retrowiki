@@ -31,5 +31,5 @@ def create_app(test_config=None):
     # TODO(Project 1): Make additional modifications here for logging in, backends
     # and additional endpoints.
     be = Backend()
-    #be.get_wiki_page("a")
+    be.upload("firstPage", "a")
     return app
