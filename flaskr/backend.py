@@ -1,22 +1,15 @@
 # TODO(Project 1): Implement Backend according to the requirements.
-# Imports the Google Cloud client library
 from google.cloud import storage
 
 
 class Backend:
 
     def __init__(self, opener = open):
-        self.writeBucket =opener
-        self.readBucket =opener
         self.storage_client = storage.Client()
-        
         self.bucketName_content = "group_wiki_content"
         self.bucketName_users = "users_and_passwords"
-
-        #Creating the buckets
-        #The bucket already exists, it just needs a name
         self.bucket_content = self.storage_client.bucket(self.bucketName_content)
-        self.bucket_users = self.storage_client.bucket(self.bucketName_users)
+        self.bucket_users = self.storage_client.bucket(self.bucketName_users)      
         
     def get_wiki_page(self, name):
         blob = self.bucket_content.blob(self.bucketName_content+"/"+name)
@@ -28,7 +21,7 @@ class Backend:
         for blob in blobs:
             print(blob.name)
 
-    def upload(self, content, name):  
+    def upload(self, content, name):
         """Uploads content into the group_wiki_content bucket
 
         It should be able to store text and pictures
@@ -37,12 +30,13 @@ class Backend:
         """  
         #The blob will be the name of the object the bucket will use to identify it
         blob = self.bucket_content.blob(self.bucketName_content+"/"+name)
-
         print(f"Bucket {self.bucketName_content} created.")
         with blob.open("w") as f:
             print(f"Bucket {self.bucketName_content} created.")
             f.write(content)        
         print(f"Bucket {self.bucketName_content} created.")
+
+
 
     def sign_up(self, username, password):
         blob = self.bucket_users.blob(self.bucketName_users+"/"+username)
@@ -59,10 +53,13 @@ class Backend:
                 matched = True
         return matched
 
+
     def get_image(self, imageName):
         blob = self.bucket_content.blob(self.bucketName_content+"/"+imageName)
         image = None
         with blob.open("r") as f:
             image = f.read()
         return image
+
+
 
