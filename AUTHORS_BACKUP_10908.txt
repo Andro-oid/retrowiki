@@ -1,9 +1,0 @@
-<<<<<<< HEAD
-TODO(Checkpoint Requirement 1 of 3): Add team member names and emails.
-Manuel Mares
-=======
-TODO(Checkpoint Requirement 1 of 3): 
-Andro Aguilar <andro_aguilar@techexchange.in>
-Manuel Mares <manuelms@techexchange.in>
-Matthew Getachew <matthew.getachew@techexchange.in>
->>>>>>> 53b372149704ca672776bf8e60d26f9e87693657
