@@ -3,34 +3,83 @@
 
 <head>
     <head>
+        <style>
+            .body{
+                border: 0;
+                padding: 0;
+                margin:0;
+                height: auto;
+            }
+            .navContainer {
+                display: flex;
+                flex-direction: column;                
+
+                width: 100%;
+                height: 3rem;
+
+                border: 0;
+                padding: 0;
+                margin:0;
+
+                background-color: rgb(122, 122, 215);
+            }
+            .navMenu{
+                display:flex;
+                flex-direction: row;
+                justify-content: space-evenly;
+
+                width: 100%;
+                height: 100%;
+                border: 0;
+                padding: 0;
+                margin:0;
+
+                list-style-type: none;
+            }
+            .navMenu_button{
+                display:flex;
+                justify-content: center;
+                align-items: center;
+                line-height: 1.5rem;
+                height: 100%;
+                width: 100%;
+            }
+                .navMenu_button:hover{
+                    background-color: rgb(157, 157, 229);
+                }
+                .navMenu_button:action{
+                    background-color: rgb(187, 187, 230);
+                }
+            .navMenu_text{
+                align-items: center;
+                text-align: center;
+                color: white;
+                font-weight: 800;
+                font-size: 1.5rem;
+                text-decoration: none;
+            }
+            </style>
         <!-- TODO(Checkpoint Requirement 3): Change the title and content of your wiki.-->
         <title>New wiki page</title>
     </head>
 </head>
 
-<body>
-    <!-- TODO(Project 1): Implement routes. -->
-    <div style="height: 100vh;">       
-        <!-- TODO(Checkpoint Requirement 3): Change the title and content of your wiki.-->        
-        <div class="pageHeader_container" id="pageHeader_container" style="background-color: rgb(215, 43, 43); display:flex; width:100%; height: 10%;">
-            This is the header of our new page!
-        </div>
-            
-        <div class="body_container" id="body_container" style="background-color: rgb(200, 200, 202); display:flex; width:100%; height: 80%;">
-            <div class="body_leftPanel" id="body_leftPanel" style="background-color: rgb(237, 237, 238); display:flex; width:25%; height: 100%;">
-                left panel
-            </div>
-            <div class="body_leftPanel" id="body_leftPanel" style="background-color: rgb(169, 169, 169); display:flex; width:50%; height: 100%;">
-                This is only a draft. We do not yet how it will look
-            </div>
-            <div class="body_leftPanel" id="body_leftPanel" style="background-color: rgb(237, 237, 238); display:flex; width:25%; height: 100%;">
-                and right panel
-            </div>
-        </div>
-        <div class="footer_container" id="footer_container" style="background-color: rgb(203, 203, 203); display:flex; width:100%; height: 10%;">
-            This is the header of our new page!
-        </div>
-    </div>
-</body>
+
+    <body class="body">
+        {% if loggeda %}
+            {% include 'navMenu_logged.html' %}  
+        {% else %}
+            {% include 'navMenu_notLogged.html' %}  
+        {% endif %}
+
+        {% block content %}{% endblock content %}
+    </body>
+
+
+
+
+    <script type="text/javascript">
+    </script>
 
 </html>
+

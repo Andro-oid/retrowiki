@@ -1,11 +1,18 @@
-<!DOCTYPE html>
-<html>
+{% extends "main.html" %}
 
-<head>
-    <head>
-        <title>upload page</title>
-    </head>
-</head>
+{% block content %}
+    <div style="
+    display:flex; flex-direction: column; justify-content: center; align-items: center; width: 100%
+    ">
 
-<body>
-<body></body>
+        <p>Click on the "Choose File" button to upload a file:</p>
+        
+        <form method="post" action="#">
+            <input type="file" id="myFile" name="filename">
+            <input type="submit" value="Submit"/>
+        </form>
+        
+    </div>
+
+{% endblock content %}
+
