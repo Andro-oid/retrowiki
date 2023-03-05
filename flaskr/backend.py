@@ -17,7 +17,7 @@ class Backend:
     def get_wiki_page(self, name):
         blob = self.bucket_content.blob(name)
         with blob.open("r") as f:
-            return (f.read())
+            print(f.read())
         
 
     def get_all_page_names(self):

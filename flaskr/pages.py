@@ -106,7 +106,6 @@ def make_endpoints(app):
         if request.method == "POST":
             file = request.files["filename"]
             filename = file.filename
-            content_type = file.content_type
             #to store the file in GCS bucket
             db.upload(file, filename)
 
