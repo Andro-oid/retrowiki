@@ -89,12 +89,6 @@ def make_endpoints(app):
         else:
             return render_template("signup.html", error = False)
 
-
-
-
-
-
-
     @app.route("/upload", methods = ["GET", "POST"])
     def upload():
         nonlocal loggedIn
@@ -104,11 +98,11 @@ def make_endpoints(app):
             return redirect(url_for("login"))
         
         if request.method == "POST":
-            file = request.files["filename"]
+            file = request.files["fileUpload"]
             filename = file.filename
             #to store the file in GCS bucket
             db.upload(file, filename)
 
-            return redirect(url_for("wiki", name=filename))
+            return redirect(url_for("upload", name=filename))
         print("logged: " + str(loggedIn) + "====================================================")
         return render_template("upload.html")

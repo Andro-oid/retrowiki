@@ -1,5 +1,6 @@
 # TODO(Project 1): Implement Backend according to the requirements.
 from google.cloud import storage
+from google.cloud.storage.blob import Blob
 
 
 class Backend:
@@ -36,8 +37,9 @@ class Backend:
             name:  the id of the wikipage 
         """          
         blob = self.bucket_content.blob(name)
-        with blob.open("w") as f:
-            f.write(content)        
+        blob.upload_from_file(content)
+        # with blob.open("w") as f:
+        #     f.write(content)        
 
 
 
