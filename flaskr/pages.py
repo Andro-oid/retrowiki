@@ -11,6 +11,11 @@ def make_endpoints(app):
 
     @app.context_processor
     def inject_now():
+        """
+        This variables are known are send to all templated when used. 
+        Their value cannot be modified. Instead, we use a condition to decide
+        what value to send.
+        """
         if loggedIn:
             return {'loggeda': True, "userName": sessionUserName}
         else:            
@@ -67,11 +72,11 @@ def make_endpoints(app):
             if db.sign_in(user, password):
                 loggedIn = True
                 sessionUserName = user
-                return redirect(url_for('home', logged = loggedIn))
+                return redirect(url_for('home'))
             else:
-                return render_template("login.html", error= True)
+                return render_template("login.html", error =True)
         else:
-            return render_template("login.html", error= False)
+            return render_template("login.html", error =True)
 
     @app.route("/signup", methods=["POST", "GET"])
     def signup():
@@ -83,26 +88,14 @@ def make_endpoints(app):
             if db.sign_up(user, password):
                 loggedIn = True
                 sessionUserName = user
-                return redirect(url_for('home', logged = loggedIn))
+                return redirect(url_for('home'))
             else:
-                return render_template("signup.html", error=True)
+                return render_template("signup.html", error =True)
         else:
-            return render_template("signup.html", error = False)
+            return render_template("signup.html", error =True)
 
     @app.route("/upload", methods = ["GET", "POST"])
     def upload():
         nonlocal loggedIn
         nonlocal sessionUserName
-
-        if not loggedIn:
-            return redirect(url_for("login"))
-        
-        if request.method == "POST":
-            file = request.files["fileUpload"]
-            filename = file.filename
-            #to store the file in GCS bucket
-            db.upload(file, filename)
-
-            return redirect(url_for("upload", name=filename))
-        print("logged: " + str(loggedIn) + "====================================================")
         return render_template("upload.html")

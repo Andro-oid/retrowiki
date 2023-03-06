@@ -4,9 +4,8 @@ from google.cloud.storage.blob import Blob
 
 
 class Backend:
-    def __init__(self, opener = open):
-        self.storage_client = storage.Client()
-
+    def __init__(self, st = storage ):
+        self.storage_client = st.Client()
         
         self.bucketName_content = "group_wiki_content"
         self.bucketName_users = "users_and_passwords"
@@ -14,7 +13,12 @@ class Backend:
 
         self.bucket_content = self.storage_client.bucket(self.bucketName_content)
         self.bucket_users = self.storage_client.bucket(self.bucketName_users)      
-        
+        #self.readContent = opener      
+        #self.writeContent = opener      
+        #self.readUser = opener      
+        #self.writeUser = opener
+
+
     def get_wiki_page(self, name):
         blob = self.bucket_content.blob(name)
         with blob.open("r") as f:
@@ -28,14 +32,7 @@ class Backend:
             pages.append(blob.name)
         return pages
 
-    def upload(self, content, name):
-        """Uploads content into the group_wiki_content bucket
-
-        It should be able to store text and pictures
-        Attributes
-            content: the wikipage
-            name:  the id of the wikipage 
-        """          
+    def upload(self, content, name):         
         blob = self.bucket_content.blob(name)
         blob.upload_from_file(content)
         # with blob.open("w") as f:
@@ -43,18 +40,41 @@ class Backend:
 
 
 
-    def sign_up(self, username, password):        
+
+
+    def sign_up(self, username, password): 
+        """This methods checks that a given the user matches the hashed password in bucket_users.
+
+        Attributes:
+            username: A string indicading the blob to look for.
+            password: A string corresponding to the content of the blob.
+        
+        Returns:
+            A boolean value indicating if the hashed password matches the user
+        """
         if self.user_exists(username):
             return False
 
         blob = self.bucket_users.blob(username)
+        #with self.writeUser( blob, "w") as f:
         with blob.open("w") as f:
             f.write(password)
         return True
 
     def user_exists(self, username):
+        """This methods checks if an user exists in the data base in bucket_users.
+
+        Attributes:
+            username: A string indicading the blob to look for.
+        
+        Returns:
+            A boolean value that indicates if the username is already registered.
+        """
         blobs = self.storage_client.list_blobs(self.bucketName_users) 
+        
         for blob in blobs:
+            temp = blob.name
+            return temp
             if blob.name == username:
                 return True
         return False
@@ -65,14 +85,14 @@ class Backend:
         if not self.user_exists(username):
             return False
 
-        blobContent = self.bucket_users.blob(username) 
+        blobUsers = self.bucket_users.blob(username)
 
         #compare passwords
-        with blobContent.open("r") as f:
+        with blobUsers.open("r") as f:
             blobPassword = f.read()
-            for line in blobPassword:
-                if blobPassword == password:
-                    return True
+            #for line in blobPassword:
+            if blobPassword == password:
+                return True
         return False
 
     def get_image(self, imageName):

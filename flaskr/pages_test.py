@@ -20,6 +20,21 @@ def client(app):
 def test_home_page(client):
     resp = client.get("/")
     assert resp.status_code == 200
-    assert b"Hello, World!\n" in resp.data
+    assert b"asdfadfasdfadfadfadasfads" in resp.data
 
 # TODO(Project 1): Write tests for other routes.
+def test_home_signup(client):
+    resp = client.get("/signup")
+    assert resp.status_code == 200
+    assert b"Create an account" in resp.data
+
+def test_home_login(client):
+    resp = client.get("/login")
+    assert resp.status_code == 200
+    assert b"Log in" in resp.data
+
+
+
+
+
+
