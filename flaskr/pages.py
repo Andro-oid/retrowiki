@@ -42,12 +42,19 @@ def make_endpoints(app):
         return f"<h1>{usr}</h1> <h2>{pwd}<h2>"
 
     # TODO(Project 1): Implement additional roautes according to the project requirements.
-    @app.route("/pages", methods=["POST"])
-    def pages():
+    @app.route("/pages", methods=["GET"])
+    def pages(page = None):
         nonlocal loggedIn
         nonlocal sessionUserName
         pages = db.get_all_page_names()
-        return render_template("pages.html", listPages = pages)
+        return render_template("pages.html", listPages = pages, page = page)
+    
+    @app.route("/pages/<path>", methods=["GET"])
+    def current_page(path):
+        nonlocal loggedIn
+        nonlocal sessionUserName
+        page = db.get_wiki_page(path)
+        return render_template("pages.html", listPages = None, page = page)
         
     @app.route("/about")
     def about():

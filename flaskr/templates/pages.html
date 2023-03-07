@@ -7,11 +7,18 @@
 
 {% block content %}
     <div class="pagesContainer">
-        {% for index in range(listPages) %}
-            <div class="pages_option" id=page+{{index}}>{{listPages[index]}}</div>
-        {% endfor %}
-        <div class="pages_option"><a>vamos a ver</a></div>
-        
+        {% if page %}
+            <p>{{page}}</p>
+        {% else %}
+            <h1><b>Pages contained in this Wiki</b></h1>
+            <ul>
+                {% for page in listPages %}
+                    <li>
+                        <a href="{{url_for('current_page', path=page)}}">{{page}}</a>
+                    </li>
+                {% endfor %}     
+            </ul>
+        {% endif %}
     </div>
 
 
@@ -26,16 +33,15 @@
 
             width: 100%;
             height: 100%;
+
         }
     </style>
     {% endblock css %}
     
     {% block javascript %}
         <script type="text/javascript">
-
-        
+            
         </script>
     {% endblock javascript %}
-
-
+    
 {% endblock content %}
