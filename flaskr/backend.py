@@ -24,7 +24,7 @@ class Backend:
     def get_wiki_page(self, name):
         blob = self.bucket_content.blob(name)
         with blob.open("r") as f:
-            print(f.read())
+            return(f.read())
         
 
     def get_all_page_names(self):
@@ -100,8 +100,8 @@ class Backend:
         image = None
         
         print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        with blob.open("r") as f:
-            print(f.read())
+        with blob.open("rb") as f:
+            # print(f.read())
             image = f.read()
         print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         return image

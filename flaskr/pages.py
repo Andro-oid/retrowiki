@@ -54,9 +54,9 @@ def make_endpoints(app):
         nonlocal loggedIn
         nonlocal sessionUserName
         
-        print("==========================================================================")
+        # print("==========================================================================")
         imageManuelMares = db.get_image("ManuelMares")
-        print(imageManuelMares + "========================================================")
+        # print(imageManuelMares + "========================================================")
         return render_template("about.html", img_Manuel = imageManuelMares)
         return render_template("about.html")
 
