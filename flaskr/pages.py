@@ -78,7 +78,7 @@ def make_endpoints(app):
             else:
                 return render_template("login.html", error =True)
         else:
-            return render_template("login.html", error =True)
+            return render_template("login.html", error =False)
 
     @app.route("/signup", methods=["POST", "GET"])
     def signup():

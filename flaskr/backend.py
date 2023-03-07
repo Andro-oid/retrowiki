@@ -74,8 +74,6 @@ class Backend:
         blobs = self.storage_client.list_blobs(self.bucketName_users) 
         
         for blob in blobs:
-            temp = blob.name
-            return temp
             if blob.name == username:
                 return True
         return False
