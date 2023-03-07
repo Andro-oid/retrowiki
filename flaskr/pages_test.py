@@ -33,6 +33,16 @@ def test_home_login(client):
     assert resp.status_code == 200
     assert b"Log in" in resp.data
 
+def test_upload(client):
+    resp = client.get("/upload")
+    assert resp.status_code == 200
+    assert b"Select a file to upload:" in resp.data
+
+def test_about(client):
+    resp = client.get("/about")
+    assert resp.status_code == 200
+    assert b"Welcome to our Wiki!" in resp.data
+
 
 
 

@@ -50,12 +50,6 @@ def test_sign_up_UserAlredyExists(mock_user_exists):
     assert db.sign_up("usuario", "123") == False
 
 
-
-
-
-
-
-
 class mock_blob:
     def __init__(self, n):
         self.name = n
@@ -66,4 +60,12 @@ def test_user_exists():
     mock.Client.return_value.list_blobs.return_value.__iter__.return_value = [blob]
     db = Backend(mock)    
     assert db.user_exists("userName") == "userName"
+
+def test_get_image ():
+    mock = MagicMock()
+    expected_return = "image"
+    mock.Client.return_value.bucket.return_value.blob.return_value.open.return_value.__enter__.return_value.read.return_value = expected_return
+    db = Backend(mock)    
+    assert db.get_image("image.jpg") == expected_return
+
 
