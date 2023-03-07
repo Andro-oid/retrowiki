@@ -41,7 +41,7 @@ def make_endpoints(app):
         # to render main.html on the home page.
         return f"<h1>{usr}</h1> <h2>{pwd}<h2>"
 
-    # TODO(Project 1): Implement additional routes according to the project requirements.
+    # TODO(Project 1): Implement additional roautes according to the project requirements.
     @app.route("/pages", methods=["POST"])
     def pages():
         nonlocal loggedIn
@@ -53,7 +53,9 @@ def make_endpoints(app):
     def about():
         nonlocal loggedIn
         nonlocal sessionUserName
+        
         return render_template("about.html")
+
        
     @app.route("/logout")
     def logout():

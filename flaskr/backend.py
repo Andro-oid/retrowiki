@@ -12,13 +12,14 @@ class Backend:
 
 
         self.bucket_content = self.storage_client.bucket(self.bucketName_content)
-        self.bucket_users = self.storage_client.bucket(self.bucketName_users)      
+        self.bucket_users = self.storage_client.bucket(self.bucketName_users)   
         #self.readContent = opener      
         #self.writeContent = opener      
         #self.readUser = opener      
         #self.writeUser = opener
 
-
+            
+        
     def get_wiki_page(self, name):
         blob = self.bucket_content.blob(name)
         with blob.open("r") as f:
@@ -101,6 +102,6 @@ class Backend:
         with blob.open("r") as f:
             image = f.read()
         return image
-
+    
 
 
