@@ -2,17 +2,18 @@
 from google.cloud import storage
 from google.cloud.storage.blob import Blob
 
-
 class Backend:
     def __init__(self, st = storage ):
         self.storage_client = st.Client()
         
         self.bucketName_content = "group_wiki_content"
         self.bucketName_users = "users_and_passwords"
+        self.bucketName_images = "author_images"
 
 
         self.bucket_content = self.storage_client.bucket(self.bucketName_content)
         self.bucket_users = self.storage_client.bucket(self.bucketName_users)   
+        self.bucket_images = self.storage_client.bucket(self.bucketName_images)  
         #self.readContent = opener      
         #self.writeContent = opener      
         #self.readUser = opener      
@@ -95,10 +96,14 @@ class Backend:
         return False
 
     def get_image(self, imageName):
-        blob = self.bucket_content.blob(self.bucketName_content+"/"+imageName)
+        blob = self.bucket_images.blob(imageName)
         image = None
+        
+        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         with blob.open("r") as f:
+            print(f.read())
             image = f.read()
+        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         return image
     
 

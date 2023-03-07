@@ -54,12 +54,13 @@ class mock_blob:
     def __init__(self, n):
         self.name = n
 
-def test_user_exists():
+def test_user_exists():    
     mock = MagicMock() 
     blob = mock_blob("userName")
     mock.Client.return_value.list_blobs.return_value.__iter__.return_value = [blob]
     db = Backend(mock)    
-    assert db.user_exists("userName") == "userName"
+    assert db.user_exists("userName") == True
+
 
 def test_get_image ():
     mock = MagicMock()
