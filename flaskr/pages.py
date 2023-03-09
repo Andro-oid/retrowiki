@@ -41,7 +41,7 @@ def make_endpoints(app):
         # to render main.html on the home page.
         return f"<h1>{usr}</h1> <h2>{pwd}<h2>"
 
-    # TODO(Project 1): Implement additional roautes according to the project requirements.
+    #uses backend to obtain list of wiki content, sends that list when rendering pages.html    
     @app.route("/pages", methods=["GET"])
     def pages(page = None):
         nonlocal loggedIn
@@ -49,6 +49,7 @@ def make_endpoints(app):
         pages = db.get_all_page_names()
         return render_template("pages.html", listPages = pages, page = page)
     
+    #uses backend to obtain content of a certain page, sends the content when rendering pages.html
     @app.route("/pages/<path>", methods=["GET"])
     def current_page(path):
         nonlocal loggedIn

@@ -6,6 +6,13 @@
  -->
 
 {% block content %}
+    <!--
+        jinja code to determine what page to display depending on whether or not the user has chosen a page
+
+        if page isn't empty, the content is displayed
+
+        otherwise, display the list of content for the user to choose from
+    -->
     <div>
         {% if page %}
             <div class="content">
