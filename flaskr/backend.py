@@ -22,7 +22,7 @@ class Backend:
             
         
     def get_wiki_page(self, name):
-        blob = self.bucket_content.blob(name)
+        blob = self.bucket_content.blob(name + ".txt")
         with blob.open("r") as f:
             return(f.read())
         
@@ -31,7 +31,7 @@ class Backend:
         pages = []
         blobs = self.storage_client.list_blobs(self.bucketName_content) 
         for blob in blobs:
-            pages.append(blob.name)
+            pages.append(blob.name[:len(blob.name) - 4])
         return pages
 
     def upload(self, content, name):         

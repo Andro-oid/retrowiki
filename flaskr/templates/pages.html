@@ -6,18 +6,27 @@
  -->
 
 {% block content %}
-    <div class="pagesContainer">
+    <div>
         {% if page %}
-            <p>{{page}}</p>
+            <div class="content">
+                <p>{{page}}</p>
+            </div>
         {% else %}
-            <h1><b>Pages contained in this Wiki</b></h1>
-            <ul>
-                {% for page in listPages %}
-                    <li>
-                        <a href="{{url_for('current_page', path=page)}}">{{page}}</a>
-                    </li>
-                {% endfor %}     
-            </ul>
+            <div class="intro">
+                <h1><b>Pages contained in this Wiki</b></h1>
+            </div>
+            
+            <div class="list">
+                <ul>
+                    {% for page in listPages %}
+                        <li>
+                            <a href="{{url_for('current_page', path=page)}}">{{page}}</a>
+                        </li>
+                    {% endfor %}     
+                </ul>
+            </div>
+
+            
         {% endif %}
     </div>
 
@@ -25,16 +34,65 @@
 
     {% block css %}
     <style rel="stylesheet" type="text/css">
-        .pagesContainer{
+        .intro{
+            text-align: center;
+            background-color: rgb(153, 153, 231);
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-
-            width: 100%;
-            height: 100%;
-
+            border-radius: 2rem;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
+            width: 30rem;
+            margin: 4rem auto;
         }
+
+        .content{
+            text-align: center;
+            background-color: rgb(176, 176, 231);
+            display: flex;
+            flex-direction: column;
+            border-radius: 2rem;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
+            width: 75%;
+            margin: 4rem auto;
+        }
+
+        .list{
+            text-align: center;
+            background-color: rgb(176, 176, 231);
+            display: flex;
+            flex-direction: column;
+            border-radius: 2rem;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
+            width: 20rem;
+            margin: 4rem auto;
+            padding-right: 35px;
+        }
+
+        .list ul{
+            list-style-type: none;
+        }
+
+        .list li{
+            width: fit-content;
+            margin: auto;
+        }
+
+        .list li:hover{
+            background-color: rgb(153, 153, 231);
+        }
+
+        .list a{
+            font-size: large;            
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .content p{
+            padding: 20px;
+        }
+
+        
+
     </style>
     {% endblock css %}
     
