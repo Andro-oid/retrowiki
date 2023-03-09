@@ -22,6 +22,14 @@ class Backend:
             
         
     def get_wiki_page(self, name):
+        """ This method gets the content of a given wiki page from the content bucket.
+
+        Args:
+            name: A string corresponding to the name of the wiki page (txt file).
+        
+        Returns:
+            The content of the wiki page as a string.
+        """
         blob = self.bucket_content.blob(name + ".txt")
         with blob.open("r") as f:
             return(f.read())
@@ -34,11 +42,17 @@ class Backend:
             pages.append(blob.name[:len(blob.name) - 4])
         return pages
 
-    def upload(self, content, name):         
+    def upload(self, content, name):
+        """This method uploads the content of a wiki page to the content bucket.
+
+        Args:
+            content: A string corresponding to the content of the wiki page.
+            name: A string corresponding to the name of the wiki page.
+        """      
         blob = self.bucket_content.blob(name)
         blob.upload_from_file(content)
-        # with blob.open("w") as f:
-        #     f.write(content)        
+        with blob.open("w") as f:
+            f.write(content)        
 
 
 
@@ -48,7 +62,7 @@ class Backend:
         """This methods checks that a given the user matches the hashed password in bucket_users.
 
         Attributes:
-            username: A string indicading the blob to look for.
+            username: string indicading the blob to look for.
             password: A string corresponding to the content of the blob.
         
         Returns:
@@ -81,7 +95,15 @@ class Backend:
 
 
     def sign_in(self, username, password):
-            
+        """ This method adds a new user to the users and passwords bucket.
+
+        Args:
+            username: string corresponding to the username of the new user.
+            password: A string corresponding to the hashed password of the new user.
+        
+        Returns:
+            A boolean value indicating if the user was successfully added.
+        """  
         if not self.user_exists(username):
             return False
 
@@ -96,6 +118,15 @@ class Backend:
         return False
 
     def get_image(self, imageName):
+        """ This method retrieves the image with the given image name from the author_images bucket.
+
+        Args:
+            imageName: A string corresponding to the name of the image to retrieve.
+
+        Returns:
+            an object representing the image file.
+        """
+
         blob = self.bucket_images.blob(imageName)
         image = None
         
