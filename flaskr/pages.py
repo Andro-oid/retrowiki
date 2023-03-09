@@ -64,7 +64,6 @@ def make_endpoints(app):
         # print("==========================================================================")
         imageManuelMares = db.get_image("ManuelMares")
         # print(imageManuelMares + "========================================================")
-        return render_template("about.html", img_Manuel = imageManuelMares)
         return render_template("about.html")
 
        
