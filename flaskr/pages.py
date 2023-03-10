@@ -2,6 +2,7 @@ from flask import render_template, redirect, url_for
 from flask import request
 from flaskr.backend import Backend
 import hashlib
+from google.cloud import storage
 
 
 def make_endpoints(app):
@@ -107,8 +108,14 @@ def make_endpoints(app):
         else:
             return render_template("signup.html", error =True)
 
-    @app.route("/upload", methods = ["GET", "POST"])
+    @app.route("/upload", methods=["GET", "POST"])
     def upload():
-        nonlocal loggedIn
-        nonlocal sessionUserName
+        client = storage.Client()
+        if request.method == "POST":
+            file = request.files["fileUpload"]
+            filename = file.filename
+            blob = client.bucket("group_wiki_content").blob(filename)
+            blob.upload_from_file(file)
+            return render_template("upload.html", message="File uploaded successfully.")
         return render_template("upload.html")
+

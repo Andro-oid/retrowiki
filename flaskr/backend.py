@@ -51,8 +51,8 @@ class Backend:
         """      
         blob = self.bucket_content.blob(name)
         blob.upload_from_file(content)
-        with blob.open("w") as f:
-            f.write(content)        
+        # with blob.open("w") as f:
+        #     f.write(content)        
 
 
 
