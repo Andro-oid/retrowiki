@@ -4,7 +4,6 @@ from flaskr.backend import Backend
 import hashlib
 from google.cloud import storage
 
-
 def make_endpoints(app):
     loggedIn = False
     db = Backend()
@@ -62,10 +61,6 @@ def make_endpoints(app):
     def about():
         nonlocal loggedIn
         nonlocal sessionUserName
-        
-        # print("==========================================================================")
-        imageManuelMares = db.get_image("ManuelMares")
-        # print(imageManuelMares + "========================================================")
         return render_template("about.html")
 
        
@@ -106,7 +101,7 @@ def make_endpoints(app):
             else:
                 return render_template("signup.html", error =True)
         else:
-            return render_template("signup.html", error =True)
+            return render_template("signup.html", error =False)
 
     @app.route("/upload", methods=["GET", "POST"])
     def upload():

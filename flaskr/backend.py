@@ -129,12 +129,9 @@ class Backend:
 
         blob = self.bucket_images.blob(imageName)
         image = None
-        
-        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        with blob.open("rb") as f:
-            # print(f.read())
+        with blob.open("r") as f:
+            print(f.read())
             image = f.read()
-        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         return image
     
 
