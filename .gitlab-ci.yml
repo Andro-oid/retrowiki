@@ -7,7 +7,6 @@ lint:
     only:
         - pushes
 
-
 unittest:
     stage: test
     dependencies:
