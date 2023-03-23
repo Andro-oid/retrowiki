@@ -6,6 +6,7 @@ lint:
         - yapf --style google --recursive --diff .
     only:
         - pushes
+        
 
 unittest:
     stage: test
