@@ -4,6 +4,7 @@ from flaskr.backend import Backend
 import hashlib
 from google.cloud import storage
 
+
 def make_endpoints(app):
     loggedIn = False
     db = Backend()
@@ -18,9 +19,9 @@ def make_endpoints(app):
         """
         if loggedIn:
             return {'loggeda': True, "userName": sessionUserName}
-        else:            
+        else:
             return {'loggeda': False, "userName": ""}
-        
+
     # Flask uses the "app.route" decorator to call methods when users
     # go to a specific route on the project's website.
     @app.route("/home", methods=["GET"])
@@ -32,7 +33,6 @@ def make_endpoints(app):
         # to render main.html on the home page.
         return render_template("home.html")
 
-        
     @app.route("/<usr>")
     def user(usr, pwd):
         nonlocal loggedIn
@@ -41,36 +41,35 @@ def make_endpoints(app):
         # to render main.html on the home page.
         return f"<h1>{usr}</h1> <h2>{pwd}<h2>"
 
-    #uses backend to obtain list of wiki content, sends that list when rendering pages.html    
+    #uses backend to obtain list of wiki content, sends that list when rendering pages.html
     @app.route("/pages", methods=["GET"])
-    def pages(page = None):
+    def pages(page=None):
         nonlocal loggedIn
         nonlocal sessionUserName
         pages = db.get_all_page_names()
-        return render_template("pages.html", listPages = pages, page = page)
-    
+        return render_template("pages.html", listPages=pages, page=page)
+
     #uses backend to obtain content of a certain page, sends the content when rendering pages.html
     @app.route("/pages/<path>", methods=["GET"])
     def current_page(path):
         nonlocal loggedIn
         nonlocal sessionUserName
         page = db.get_wiki_page(path)
-        return render_template("pages.html", listPages = None, page = page)
-        
+        return render_template("pages.html", listPages=None, page=page)
+
     @app.route("/about")
     def about():
         nonlocal loggedIn
         nonlocal sessionUserName
         return render_template("about.html")
 
-       
     @app.route("/logout")
     def logout():
         nonlocal loggedIn
         nonlocal sessionUserName
         loggedIn = False
         return redirect(url_for('home'))
-        
+
     @app.route("/login", methods=["POST", "GET"])
     def login():
         nonlocal loggedIn
@@ -83,9 +82,9 @@ def make_endpoints(app):
                 sessionUserName = user
                 return redirect(url_for('home'))
             else:
-                return render_template("login.html", error =True)
+                return render_template("login.html", error=True)
         else:
-            return render_template("login.html", error =False)
+            return render_template("login.html", error=False)
 
     @app.route("/signup", methods=["POST", "GET"])
     def signup():
@@ -99,9 +98,9 @@ def make_endpoints(app):
                 sessionUserName = user
                 return redirect(url_for('home'))
             else:
-                return render_template("signup.html", error =True)
+                return render_template("signup.html", error=True)
         else:
-            return render_template("signup.html", error =False)
+            return render_template("signup.html", error=False)
 
     @app.route("/upload", methods=["GET", "POST"])
     def upload():
@@ -111,6 +110,6 @@ def make_endpoints(app):
             filename = file.filename
             blob = client.bucket("group_wiki_content").blob(filename)
             blob.upload_from_file(file)
-            return render_template("upload.html", message="File uploaded successfully.")
+            return render_template("upload.html",
+                                   message="File uploaded successfully.")
         return render_template("upload.html")
-

@@ -2,25 +2,25 @@
 from google.cloud import storage
 from google.cloud.storage.blob import Blob
 
+
 class Backend:
-    def __init__(self, st = storage ):
+
+    def __init__(self, st=storage):
         self.storage_client = st.Client()
-        
+
         self.bucketName_content = "group_wiki_content"
         self.bucketName_users = "users_and_passwords"
         self.bucketName_images = "author_images"
 
-
-        self.bucket_content = self.storage_client.bucket(self.bucketName_content)
-        self.bucket_users = self.storage_client.bucket(self.bucketName_users)   
-        self.bucket_images = self.storage_client.bucket(self.bucketName_images)  
-        #self.readContent = opener      
-        #self.writeContent = opener      
-        #self.readUser = opener      
+        self.bucket_content = self.storage_client.bucket(
+            self.bucketName_content)
+        self.bucket_users = self.storage_client.bucket(self.bucketName_users)
+        self.bucket_images = self.storage_client.bucket(self.bucketName_images)
+        #self.readContent = opener
+        #self.writeContent = opener
+        #self.readUser = opener
         #self.writeUser = opener
 
-            
-        
     def get_wiki_page(self, name):
         """ This method gets the content of a given wiki page from the content bucket.
 
@@ -32,12 +32,11 @@ class Backend:
         """
         blob = self.bucket_content.blob(name + ".txt")
         with blob.open("r") as f:
-            return(f.read())
-        
+            return (f.read())
 
     def get_all_page_names(self):
         pages = []
-        blobs = self.storage_client.list_blobs(self.bucketName_content) 
+        blobs = self.storage_client.list_blobs(self.bucketName_content)
         for blob in blobs:
             pages.append(blob.name[:len(blob.name) - 4])
         return pages
@@ -48,17 +47,13 @@ class Backend:
         Args:
             content: A string corresponding to the content of the wiki page.
             name: A string corresponding to the name of the wiki page.
-        """      
+        """
         blob = self.bucket_content.blob(name)
         blob.upload_from_file(content)
         # with blob.open("w") as f:
-        #     f.write(content)        
+        #     f.write(content)
 
-
-
-
-
-    def sign_up(self, username, password): 
+    def sign_up(self, username, password):
         """This methods checks that a given the user matches the hashed password in bucket_users.
 
         Attributes:
@@ -86,13 +81,12 @@ class Backend:
         Returns:
             A boolean value that indicates if the username is already registered.
         """
-        blobs = self.storage_client.list_blobs(self.bucketName_users) 
-        
+        blobs = self.storage_client.list_blobs(self.bucketName_users)
+
         for blob in blobs:
             if blob.name == username:
                 return True
         return False
-
 
     def sign_in(self, username, password):
         """ This method adds a new user to the users and passwords bucket.
@@ -103,7 +97,7 @@ class Backend:
         
         Returns:
             A boolean value indicating if the user was successfully added.
-        """  
+        """
         if not self.user_exists(username):
             return False
 
@@ -133,6 +127,3 @@ class Backend:
             print(f.read())
             image = f.read()
         return image
-    
-
-
