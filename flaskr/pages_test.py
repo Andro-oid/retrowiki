@@ -1,5 +1,4 @@
 from flaskr import create_app
-
 import pytest
 
 
@@ -51,7 +50,7 @@ def test_upload(client):
 def test_about(client):
     resp = client.get("/about")
     assert resp.status_code == 200
-    assert b"About our Wiki!" in resp.get_data()
+    assert b"Welcome to our Wiki!" in resp.get_data()
 
 
 def test_wiki_list(client):
