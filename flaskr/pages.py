@@ -3,6 +3,7 @@ from flask import request
 from flaskr.backend import Backend
 import hashlib
 from google.cloud import storage
+import requests
 
 
 def make_endpoints(app):
@@ -61,6 +62,7 @@ def make_endpoints(app):
     def about():
         nonlocal loggedIn
         nonlocal sessionUserName
+        
         return render_template("about.html")
 
     @app.route("/logout")
@@ -113,3 +115,15 @@ def make_endpoints(app):
             return render_template("upload.html",
                                    message="File uploaded successfully.")
         return render_template("upload.html")
+
+    @app.route("/wikimusic", methods=["GET", "POST"])
+    def wikiAPIRequest():
+        search= "dos"
+        fullSearch = "https://en.wikipedia.org/api/rest_v1/page/html/"+search+"?redirect=false&stash=false/api.php?action=parse&page=test"
+        request = requests.get(fullSearch)
+        print("======================================================================")
+        print(request.text)
+        print("JSON!!======================================================================")
+        print(request.json)
+        return render_template("WikiMusicAnswer.html", article = request.text)
+
