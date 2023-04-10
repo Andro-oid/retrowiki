@@ -5,6 +5,7 @@
                 <li id="navMenu_About" class="navMenu_button" ><a class="navMenu_text" id="navMenu_text">   About</a></li>
                 <li id="navMenu_Pages" class="navMenu_button" ><a class="navMenu_text" id="navMenu_text">   Pages</a></li>
                 <li id="navMenu_Upload" class="navMenu_button" ><a class="navMenu_text" id="navMenu_text">  Upload</a></li>
+                <li id="navMenu_Wikimusic" class="navMenu_button" ><a class="navMenu_text" id="navMenu_text">  Wikimusic</a></li>
                 <li id="navMenu_Logout" class="navMenu_button" ><a class="navMenu_text" id="navMenu_text">  Logout</a></li>
                 <li id="userName" class="userName" >{{userName}}</li>
             </ul>   
@@ -50,6 +51,9 @@
                 };
                 document.getElementById("navMenu_Logout").onclick = function () {
                     location.href = "/logout";
+                };
+                document.getElementById("navMenu_Wikimusic").onclick = function () {
+                    location.href = "/wikimusic";
                 };
             })
         </script>
