@@ -3,7 +3,7 @@ from flask import request
 from flaskr.backend import Backend
 import hashlib
 from google.cloud import storage
-from .wikimusic import get_wikipedia_articles, get_iframe_spotify_songs
+
 
 def make_endpoints(app):
     loggedIn = False
@@ -113,17 +113,3 @@ def make_endpoints(app):
             return render_template("upload.html",
                                    message="File uploaded successfully.")
         return render_template("upload.html")
-
-
-    @app.route("/wikimusic", methods=["GET", "POST"])
-    def wikiAPIRequest():
-        songname = request.form["songname"]
-        artist = request.form["artist"]
-        if songname == "" or artist == "":
-            return render_template("wikimusic_notfound.html");
-
-
-        iframes = get_iframe_spotify_songs(songname, artist)
-        articles =get_wikipedia_articles(songname + " " + artist)
-
-            return render_template("WikiMusicAnswer.html", articles = articles, iframes_spotify = iframes)
