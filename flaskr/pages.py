@@ -131,7 +131,7 @@ def make_endpoints(app):
 
         #must wait for backend method in order to work
         success = db.delete_comment(page_name, username, datetime_str)
-        print('Success:', success)
+
         if success:
             return "Comment deleted successfully", 200
         else:
