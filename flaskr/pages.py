@@ -123,7 +123,19 @@ def make_endpoints(app):
                                    message="File uploaded successfully.")
         return render_template("upload.html")
 
+    @app.route("/delete_comment", methods=["POST"])
+    def delete_comment():
+        page_name = request.form["page_name"]
+        username = request.form["username"]
+        datetime_str = request.form["datetime_str"]
 
+        #must wait for backend method in order to work
+        success = db.delete_comment(page_name, username, datetime_str)
+        print('Success:', success)
+        if success:
+            return "Comment deleted successfully", 200
+        else:
+            return "Failed to delete comment", 400
     # @app.route("/wikimusic", methods=["GET", "POST"])
     # def wikiAPIRequest():
     #     songname = request.form["songname"]
