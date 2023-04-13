@@ -10,6 +10,7 @@
             box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
             width: 85%;
             margin: 4rem auto;
+            height: auto;
         }
 
         #main-info {
@@ -73,7 +74,16 @@
             margin-left: 0;
             margin-right: 0;
         }
-                
+
+        .sub-info{
+                display: flex;
+                height: auto;
+                min-height: 5rem;
+                width: 100%;
+                background: #9191d4;
+                border-radius: 20px;
+                margin: 30px 0;
+        }  
     </style>
 
     <body>
@@ -114,7 +124,7 @@
                 </div>
             </div>
             
-            <div id="sub-info">
+            <div id="sub-info" class="sub-info">
                 <div id="recently-viewed">
                     <ul>
                         {% for page in recent %}
