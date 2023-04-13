@@ -46,7 +46,18 @@ class Backend:
         blob.upload_from_filename(path)
 
     def get_user_bio(self, username):
-        pass
+        blob = self.bucket_profile_pictures.blob("bios/" + username)
+        if blob.exists():
+            with blob.open("r") as f:
+                return (f.read())
+        else:
+            return None
+
+    def upload_user_bio(self, text, name):
+        blob = self.bucket_profile_pictures.blob("bios/" + name)
+        blob.cache_control = 0
+        with blob.open("w") as user:
+            user.write(text)            
         
     def get_wiki_page(self, name):
         """ This method gets the content of a given wiki page from the content bucket.

@@ -46,16 +46,26 @@ def make_endpoints(app):
     def profile():
         nonlocal loggedIn
         nonlocal sessionUserName
+        
         if request.method == "POST":
-            uploaded_file = request.files["pfpUpload"]
-            if uploaded_file.filename != "":
-                uploaded_file.save(os.path.join('flaskr/static/avatars', sessionUserName + ".png"))
-                db.upload_profile_picture(os.path.relpath("flaskr/static/avatars/" + sessionUserName + ".png"), sessionUserName)
+
+            if "pfpUpload" in request.files:
+                uploaded_pfp = request.files["pfpUpload"]
+                if uploaded_pfp.filename != "":
+                    uploaded_pfp.save(os.path.join('flaskr/static/avatars', sessionUserName + ".png"))
+                    db.upload_profile_picture(os.path.relpath("flaskr/static/avatars/" + sessionUserName + ".png"), sessionUserName)
+                    
+
+            if "bioUpload" in request.form:
+                uploaded_bio = request.form["bioUpload"]
+                db.upload_user_bio(uploaded_bio, sessionUserName)
+            
             profile_picture = db.get_user_profile_picture(sessionUserName)
-            bio = sessionUserName
+            bio = db.get_user_bio(sessionUserName)
             return render_template("profile.html", profile_pic=profile_picture, profile_bio = bio)
+        
         profile_picture = db.get_user_profile_picture(sessionUserName)
-        bio = sessionUserName
+        bio = db.get_user_bio(sessionUserName)
         return render_template("profile.html", profile_pic=profile_picture, profile_bio = bio)
     
 

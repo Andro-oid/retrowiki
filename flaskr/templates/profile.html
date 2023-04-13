@@ -34,9 +34,19 @@
                 </div>
                 <div id="profile-bio">
                     {% if profile_bio %}
-                        <p contenteditable="true">{{profile_bio}}</p>
+                    <div id="upload">
+                        <form method="POST">
+                            <p><input type="text" name="bioUpload" value="{{profile_bio}}"></p>
+                            <p><input type="submit" value="Submit"></p>
+                        </form>
+                    </div>
                     {% else %}
-                        <p contenteditable="true">Click here to write a bio!</p>
+                    <div id="upload">
+                        <form method="POST">
+                            <p><input name="bioUpload"></p>
+                            <p><input type="submit" value="Submit"></p>
+                        </form>
+                    </div>
                     {% endif %}
                 </div>
             </div>
