@@ -113,6 +113,19 @@
                     {% endif %}
                 </div>
             </div>
+            
+            <div id="sub-info">
+                <div id="recently-viewed">
+                    <ul>
+                        {% for page in recent %}
+                            <li>
+                                <p>{{page}}</p>                                
+                            </li>
+                        {% endfor %} 
+                    </ul>
+                        
+                </div>                
+            </div>
         </div>
 
     </body>

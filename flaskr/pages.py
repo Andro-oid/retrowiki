@@ -62,10 +62,12 @@ def make_endpoints(app):
             
             profile_picture = db.get_user_profile_picture(sessionUserName)
             bio = db.get_user_bio(sessionUserName)
+            recently_viewed = db.get_recently_viewed(sessionUserName)
             return render_template("profile.html", profile_pic=profile_picture, profile_bio = bio)
         
         profile_picture = db.get_user_profile_picture(sessionUserName)
         bio = db.get_user_bio(sessionUserName)
+        recently_viewed = db.get_recently_viewed(sessionUserName)
         return render_template("profile.html", profile_pic=profile_picture, profile_bio = bio)
     
 
@@ -82,7 +84,8 @@ def make_endpoints(app):
     def current_page(path):
         nonlocal loggedIn
         nonlocal sessionUserName
-        page = db.get_wiki_page(path)           
+        if loggedIn:
+            db.update_recent(path, sessionUserName)            
         return render_template("pages.html", listPages=None, page=page)
 
     @app.route("/about")

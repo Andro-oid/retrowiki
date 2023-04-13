@@ -165,3 +165,33 @@ class Backend:
             print(f.read())
             image = f.read()
         return image
+
+
+    def get_recently_viewed(self, username):
+        blob = self.bucket_profile_pictures.blob("recently_viewed/" + username)
+        blob.content_type = ".json"
+        
+        if blob.exists():
+            data = json.loads(blob.download_as_string())
+            return [data["Recent"]["First"], data["Recent"]["Second"], data["Recent"]["Third"]]
+                
+        else:
+            blob.cache_control = 0
+            blob.upload_from_filename("flaskr/static/default/recent.json")
+            return ["None", "None", "None"]
+
+    def update_recent(self, page, username):    
+        blob = self.bucket_profile_pictures.blob("recently_viewed/" + username)
+        blob.content_type = ".json"
+
+        with blob.open("r") as recent:
+            data = json.load(recent)
+            recent.close()
+
+        data["Recent"]["Third"] = data["Recent"]["Second"]
+        data["Recent"]["Second"] = data["Recent"]["First"]
+        data["Recent"]["First"] = page
+
+        with blob.open("w") as recent:
+            recent.write(json.dumps(data))
+            recent.close()
