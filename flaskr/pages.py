@@ -50,12 +50,21 @@ def make_endpoints(app):
         return render_template("pages.html", listPages=pages, page=page)
 
     #uses backend to obtain content of a certain page, sends the content when rendering pages.html
-    @app.route("/pages/<path>", methods=["GET"])
+    @app.route("/pages/<path>", methods=["GET", "POST"])
     def current_page(path):
         nonlocal loggedIn
         nonlocal sessionUserName
         page = db.get_wiki_page(path)
-        return render_template("pages.html", listPages=None, page=page)
+
+        # Handle comment submission
+        if request.method == "POST":
+            comment = request.form["comment"]
+            db.add_comment(path, sessionUserName, comment)
+            return redirect(url_for('current_page', path=path))
+
+        # Get existing comments for the page
+        comments = db.get_comments(path)
+        return render_template('pages.html', page=page, comments=comments)
 
     @app.route("/about")
     def about():
@@ -113,3 +122,17 @@ def make_endpoints(app):
             return render_template("upload.html",
                                    message="File uploaded successfully.")
         return render_template("upload.html")
+
+
+    # @app.route("/wikimusic", methods=["GET", "POST"])
+    # def wikiAPIRequest():
+    #     songname = request.form["songname"]
+    #     artist = request.form["artist"]
+    #     if songname == "" or artist == "":
+    #         return render_template("wikimusic_notfound.html");
+
+
+    #     iframes = get_iframe_spotify_songs(songname, artist)
+    #     articles =get_wikipedia_articles(songname + " " + artist)
+
+    #       return render_template("WikiMusicAnswer.html", articles = articles, iframes_spotify = iframes)

@@ -1,7 +1,7 @@
 # TODO(Project 1): Implement Backend according to the requirements.
 from google.cloud import storage
 from google.cloud.storage.blob import Blob
-
+from datetime import datetime
 
 class Backend:
 
@@ -11,11 +11,13 @@ class Backend:
         self.bucketName_content = "group_wiki_content"
         self.bucketName_users = "users_and_passwords"
         self.bucketName_images = "author_images"
+        self.bucketName_comments = "comment--bucket"
 
-        self.bucket_content = self.storage_client.bucket(
-            self.bucketName_content)
+        self.bucket_content = self.storage_client.bucket(self.bucketName_content)
         self.bucket_users = self.storage_client.bucket(self.bucketName_users)
         self.bucket_images = self.storage_client.bucket(self.bucketName_images)
+        self.bucket_comments = self.storage_client.bucket(self.bucketName_comments)
+
         #self.readContent = opener
         #self.writeContent = opener
         #self.readUser = opener
@@ -127,3 +129,42 @@ class Backend:
             print(f.read())
             image = f.read()
         return image
+
+    def add_comment(self, page_name, username, comment):
+        """
+        Add a comment to the comments bucket for the specified wiki page.
+
+        Args:
+            page_name: A string corresponding to the name of the wiki page.
+            username: A string corresponding to the name of the user.
+            comment: A string corresponding to the comment to be added.
+
+        Returns:
+            None.
+        """
+        blob_name = f"{page_name}/{username}/{datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')}.txt"
+        blob = self.bucket_comments.blob(blob_name)
+        blob.upload_from_string(comment)
+        print(page_name, username, comment)
+
+    def get_comments(self, page_name):
+        """
+        Retrieve comments from the comments bucket for the specified wiki page.
+
+        Args:
+            page_name: A string corresponding to the name of the wiki page.
+
+        Returns:
+            A list of tuples containing the username and comment text.
+        """
+        blobs = self.bucket_comments.list_blobs(prefix=page_name)
+        print("Blobs:", blobs)
+        comments = []
+        for blob in blobs:
+            username, datetime_str = blob.name[len(page_name)+1:].split("/")
+            with blob.open("r") as f:
+                comment = f.read()
+                comments.append((username, datetime_str, comment))
+        print('=================')
+        print(comments)
+        return comments
