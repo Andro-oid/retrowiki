@@ -1,0 +1,46 @@
+{% extends "main.html" %}
+
+{% block content %}
+
+    <style>
+        #profile-card {
+            display: flex;
+            flex-direction: column;
+            border-radius: 2rem;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
+            width: 85%;
+            margin: 4rem auto;
+        }
+    </style>
+
+    <body>
+        
+        <div id="profile-card">
+            <div id="main-info">
+                <div id="profile-pic">
+                    <div>
+                        {% if profile_pic %}
+                            <img src="{{profile_pic}}" alt="Your Profile Picture">
+                        {% else %}
+                            <p>You do not have a profile picture</p>
+                        {% endif %}
+                    </div>
+                    <div id="upload">
+                        <form method="POST" action="" enctype="multipart/form-data">
+                            <p><input type="file" name="pfpUpload"></p>
+                            <p><input type="submit" value="Submit"></p>
+                        </form>
+                    </div>
+                </div>
+                <div id="profile-bio">
+                    {% if profile_bio %}
+                        <p contenteditable="true">{{profile_bio}}</p>
+                    {% else %}
+                        <p contenteditable="true">Click here to write a bio!</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+    </body>
+{% endblock content %}

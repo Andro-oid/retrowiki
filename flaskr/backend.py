@@ -1,26 +1,53 @@
 # TODO(Project 1): Implement Backend according to the requirements.
+import json
+import os
+
 from google.cloud import storage
 from google.cloud.storage.blob import Blob
-
+from google.oauth2 import service_account
+from datetime import timezone, datetime
 
 class Backend:
 
     def __init__(self, st=storage):
-        self.storage_client = st.Client()
+
+        with open('google_cloud_auth.json') as source:
+            info = json.load(source)
+
+        storage_credentials = service_account.Credentials.from_service_account_info(info)
+
+        self.storage_client = st.Client(credentials=storage_credentials)
 
         self.bucketName_content = "group_wiki_content"
         self.bucketName_users = "users_and_passwords"
         self.bucketName_images = "author_images"
+        self.bucketName_profile_pictures = "wiki_viewer_user_data"
 
-        self.bucket_content = self.storage_client.bucket(
-            self.bucketName_content)
+        self.bucket_content = self.storage_client.bucket(self.bucketName_content)
         self.bucket_users = self.storage_client.bucket(self.bucketName_users)
         self.bucket_images = self.storage_client.bucket(self.bucketName_images)
+        self.bucket_profile_pictures = self.storage_client.bucket(self.bucketName_profile_pictures)
         #self.readContent = opener
         #self.writeContent = opener
         #self.readUser = opener
         #self.writeUser = opener
 
+    def get_user_profile_picture(self, username):      
+        blob = self.bucket_profile_pictures.blob("profile_pictures/" + username)
+        blob.content_type = "image/png"
+        url_lifetime = int(datetime.now(tz=timezone.utc).timestamp()) + 3600
+        return blob.generate_signed_url(expiration=url_lifetime, method="GET")
+        
+        
+    def upload_profile_picture(self, path, name):
+        blob = self.bucket_profile_pictures.blob("profile_pictures/" + name)
+        blob.content_type = "image/png"
+        blob.cache_control = 0
+        blob.upload_from_filename(path)
+
+    def get_user_bio(self, username):
+        pass
+        
     def get_wiki_page(self, name):
         """ This method gets the content of a given wiki page from the content bucket.
 
