@@ -36,7 +36,10 @@ class Backend:
         blob = self.bucket_profile_pictures.blob("profile_pictures/" + username)
         blob.content_type = "image/png"
         url_lifetime = int(datetime.now(tz=timezone.utc).timestamp()) + 3600
-        return blob.generate_signed_url(expiration=url_lifetime, method="GET")
+        if blob.exists():
+            return blob.generate_signed_url(expiration=url_lifetime, method="GET")
+        else:
+            return "https://storage.googleapis.com/author_images/Default.png"
         
         
     def upload_profile_picture(self, path, name):
