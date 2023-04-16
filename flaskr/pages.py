@@ -126,4 +126,4 @@ def make_endpoints(app):
         iframes = get_iframe_spotify_songs(songname, artist)
         articles =get_wikipedia_articles(songname + " " + artist)
 
-            return render_template("WikiMusicAnswer.html", articles = articles, iframes_spotify = iframes)
+        return render_template("WikiMusicAnswer.html", articles = articles, iframes_spotify = iframes)
