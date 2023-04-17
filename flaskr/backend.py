@@ -126,7 +126,6 @@ class Backend:
         blob = self.bucket_images.blob(imageName)
         image = None
         with blob.open("r") as f:
-            print(f.read())
             image = f.read()
         return image
 
@@ -145,7 +144,6 @@ class Backend:
         blob_name = f"{page_name}/{username}/{datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')}.txt"
         blob = self.bucket_comments.blob(blob_name)
         blob.upload_from_string(comment)
-        print(page_name, username, comment)
 
     def get_comments(self, page_name):
         """
@@ -158,13 +156,10 @@ class Backend:
             A list of tuples containing the username and comment text.
         """
         blobs = self.bucket_comments.list_blobs(prefix=page_name)
-        print("Blobs:", blobs)
         comments = []
         for blob in blobs:
             username, datetime_str = blob.name[len(page_name)+1:].split("/")
             with blob.open("r") as f:
                 comment = f.read()
                 comments.append((username, datetime_str, comment))
-        print('=================')
-        print(comments)
         return comments

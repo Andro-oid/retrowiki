@@ -18,9 +18,9 @@ def make_endpoints(app):
         what value to send.
         """
         if loggedIn:
-            return {'loggeda': True, "userName": sessionUserName}
+            return {'loggedIn': True, "userName": sessionUserName}
         else:
-            return {'loggeda': False, "userName": ""}
+            return {'loggedIn': False, "userName": ""}
 
     # Flask uses the "app.route" decorator to call methods when users
     # go to a specific route on the project's website.
@@ -131,20 +131,7 @@ def make_endpoints(app):
 
         #must wait for backend method in order to work
         success = db.delete_comment(page_name, username, datetime_str)
-        print('Success:', success)
         if success:
             return "Comment deleted successfully", 200
         else:
             return "Failed to delete comment", 400
-    # @app.route("/wikimusic", methods=["GET", "POST"])
-    # def wikiAPIRequest():
-    #     songname = request.form["songname"]
-    #     artist = request.form["artist"]
-    #     if songname == "" or artist == "":
-    #         return render_template("wikimusic_notfound.html");
-
-
-    #     iframes = get_iframe_spotify_songs(songname, artist)
-    #     articles =get_wikipedia_articles(songname + " " + artist)
-
-    #       return render_template("WikiMusicAnswer.html", articles = articles, iframes_spotify = iframes)
