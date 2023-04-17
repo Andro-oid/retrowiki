@@ -41,14 +41,14 @@
 
     <!-- Form for submitting a new comment -->
     {%if not page %}
-    {%elif loggeda and page %}
+    {%elif loggedIn and page %}
         <form method="POST">
-            <textarea name="comment" placeholder="Add a comment..." required style="width: 40rem; padding: 10px; border-radius: 5px;"></textarea>
+            <textarea name="comment" class="comment-textarea" placeholder="Add a comment..." required></textarea>
             <br>
-            <input type="submit" value="Submit" style="background-color: #5c78b8; border: none; color: white; padding: 10px; border-radius: 5px; cursor: pointer;">
+            <input type="submit" class="submit-button" value="Submit">
         </form>
 
-    {% elif not loggeda %}
+    {% elif not loggedIn %}
         <p>Please log in to leave a comment.</p>
     {% endif %}
     
@@ -68,6 +68,20 @@
 
     {% block css %}
     <style rel="stylesheet" type="text/css">
+    .comment-textarea {
+        width: 40rem;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .submit-button {
+        background-color: #5c78b8;
+        border: none;
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
         .intro{
             text-align: center;
             background-color: rgb(153, 153, 231);
