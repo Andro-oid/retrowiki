@@ -6,7 +6,7 @@ lint:
         - yapf --style google --recursive --diff .
     only:
         - merge_requests
-        
+        - safebranch2
 
 unittest:
     stage: test
