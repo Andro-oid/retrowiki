@@ -3,6 +3,7 @@ from flask import request
 from flaskr.backend import Backend
 import hashlib
 from google.cloud import storage
+from .wikimusic import get_wikipedia_articles, get_iframe_spotify_songs
 
 
 def make_endpoints(app):
