@@ -49,7 +49,7 @@ def _getToken():
         "Content-Type": "application/x-www-form-urlencoded"
     }
     data = {"grant_type": "client_credentials"}
-    result = post(url, headers = headers, data=data)
+    result = post(url, headers=headers, data=data)
     json_result = json.loads(result.content)
     token = json_result["access_token"]
     return token

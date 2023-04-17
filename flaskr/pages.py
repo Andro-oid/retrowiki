@@ -128,6 +128,7 @@ def make_endpoints(app):
             iframes = get_iframe_spotify_songs(songname, artist)
             articles =get_wikipedia_articles(songname + " " + artist)
 
+
             if len(articles) == 0:
                 return render_template("wikimusic_notfound.html");
             else:
