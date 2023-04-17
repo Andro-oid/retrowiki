@@ -93,7 +93,6 @@ def make_endpoints(app):
         nonlocal sessionUserName
         if request.method == "POST":
             user = request.form["nm"]
-            #password = hashlib.blake2b(request.form["pwd"].encode()).hexdigest()
             password = hashlib.blake2b(request.form["pwd"].encode()).hexdigest()
             if db.sign_up(user, password):
                 loggedIn = True
