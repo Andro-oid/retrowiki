@@ -113,3 +113,23 @@ def make_endpoints(app):
             return render_template("upload.html",
                                    message="File uploaded successfully.")
         return render_template("upload.html")
+
+
+    @app.route("/wikimusic", methods=["GET", "POST"])
+    def wikiAPIRequest():
+        if request.method == "POST":
+            songname = request.form["songname"]
+            artist = request.form["artist"]
+            if songname == "" or artist == "":
+                return render_template("wikimusic_notfound.html");
+
+
+            iframes = get_iframe_spotify_songs(songname, artist)
+            articles =get_wikipedia_articles(songname + " " + artist)
+
+            if len(articles) == 0:
+                return render_template("wikimusic_notfound.html");
+            else:
+                return render_template("WikiMusicAnswer.html", articles = articles, iframes_spotify = iframes)
+        else:
+            return render_template("WikiMusicStart.html")
