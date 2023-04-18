@@ -11,12 +11,15 @@ def app():
     })
     return app
 
+
 @pytest.fixture
 def client(app):
     return app.test_client()
 
 # TODO(Checkpoint (groups of 4 only) Requirement 4): Change test to
 # match the changes made in the other Checkpoint Requirements.
+
+
 def integration_home_page(client):
     resp = client.get("/")
     assert resp.status_code == 200
@@ -69,11 +72,13 @@ def integration_wiki_wikimusic_start(client):
     assert resp.status_code == 200
     assert b"(Re)search for a song!" in resp.get_data()
 
+
 def test_wiki_wikimusic_post(client):
     data = {"songname": "Never gonna give you up", "artist": "Rick Astley"}
     resp = client.post("/wikimusic", data=data)
     assert resp.status_code == 200
     assert b"Rick Astley" in resp.get_data()
+
 
 def integration_wiki_wikimusic_notfound(client):
     resp = client.get("/wikimusic")
