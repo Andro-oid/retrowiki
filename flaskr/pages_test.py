@@ -64,18 +64,18 @@ def integration_wiki_page(client):
     )
 
 
-# def integration_wiki_wikimusic_start(client):
-#     resp = client.get("/wikimusic")
-#     assert resp.status_code == 200
-#     assert b"(Re)search for a song!" in resp.get_data()
+def integration_wiki_wikimusic_start(client):
+    resp = client.get("/wikimusic")
+    assert resp.status_code == 200
+    assert b"(Re)search for a song!" in resp.get_data()
 
-# def test_wiki_wikimusic_post(client):
-#     resp = client.post("/wikimusic")
-#     assert resp.status_code == 200
-#     assert b"(Re)search for a song!" in resp.get_data()
+def test_wiki_wikimusic_post(client):
+    data = {"songname": "Never gonna give you up", "artist": "Rick Astley"}
+    resp = client.post("/wikimusic", data=data)
+    assert resp.status_code == 200
+    assert b"Rick Astley" in resp.get_data()
 
-# def integration_wiki_wikimusic_notfound(client):
-#     resp = client.get("/wikimusic")
-#     assert resp.status_code == 200
-#     assert b"(Re)search for a song!" in resp.get_data()
-
+def integration_wiki_wikimusic_notfound(client):
+    resp = client.get("/wikimusic")
+    assert resp.status_code == 200
+    assert b"(Re)search for a song!" in resp.get_data()
