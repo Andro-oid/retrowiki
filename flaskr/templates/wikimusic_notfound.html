@@ -3,28 +3,28 @@
 {% block content %}
 
 
-    <div>
-        <form id="formSubmition" method="post" action="#">
-            <h1>
-                (Re)search for a song!
-            </h1>
-            <div>
-                <p>
-                    Artist:
-                </p>
-                <input id="artist" type="text" name="artist">
-            </div>
-            <div>
-                <p>
-                    Song name:
-                </p>
-                <input id="songname" type="text" name="songname">
-                <p><input id="submitionButton"  class="submitionButton" type="submit" value="search!"></p>
-            </div>
+<div>
+    <form id="formSubmition" method="post" action="#">
+        <h1>
+            (Re)search for a song!
+        </h1>
+        <div>
+            <p>
+                Artist:
+            </p>
+            <input id="artist" type="text" name="artist">
+        </div>
+        <div>
+            <p>
+                Song name:
+            </p>
+            <input id="songname" type="text" name="songname">
+            <p><input id="submitionButton" class="submitionButton" type="submit" value="search!"></p>
+        </div>
         <div class="container">
             <h1>SONG NOT FOUND</h1>
         </div>
-    </div>
+</div>
 {% endblock content %}
 
 {% block css %}
@@ -34,6 +34,7 @@
         padding: 2rem 10rem;
         margin-bottom: 2rem;
     }
+
     h1 {
         display: flex;
         align-items: center;
@@ -41,6 +42,7 @@
         width: 100%;
         color: white;
     }
+
     div {
         height: auto;
         width: 100%;
@@ -48,6 +50,7 @@
         flex-direction: column;
         margin-bottom: 1rem;
     }
+
     p {
         margin: 0;
         border: 0;
@@ -56,6 +59,7 @@
         font-size: 1.3rem;
         color: azure;
     }
+
     input[type="text"] {
         border: none;
         background-color: white;
@@ -67,6 +71,7 @@
         font-weight: 500;
         padding-left: 1rem;
     }
+
     .submitionButton {
         margin-top: 1rem;
         border: none;
@@ -78,9 +83,11 @@
         height: 3rem;
         border-radius: 0.5rem;
     }
+
     .submitionButton:hover {
         background-color: #37b442;
     }
+
     .submitionButton:active {
         background-color: rgb(101, 221, 111);
     }

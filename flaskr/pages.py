@@ -5,6 +5,7 @@ import hashlib
 from google.cloud import storage
 from .wikimusic import get_wikipedia_articles, get_iframe_spotify_songs
 
+
 def make_endpoints(app):
     loggedIn = False
     db = Backend()
@@ -41,7 +42,7 @@ def make_endpoints(app):
         # to render main.html on the home page.
         return f"<h1>{usr}</h1> <h2>{pwd}<h2>"
 
-    #uses backend to obtain list of wiki content, sends that list when rendering pages.html
+    # uses backend to obtain list of wiki content, sends that list when rendering pages.html
     @app.route("/pages", methods=["GET"])
     def pages(page=None):
         nonlocal loggedIn
@@ -49,7 +50,7 @@ def make_endpoints(app):
         pages = db.get_all_page_names()
         return render_template("pages.html", listPages=pages, page=page)
 
-    #uses backend to obtain content of a certain page, sends the content when rendering pages.html
+    # uses backend to obtain content of a certain page, sends the content when rendering pages.html
     @app.route("/pages/<path>", methods=["GET"])
     def current_page(path):
         nonlocal loggedIn
@@ -76,8 +77,9 @@ def make_endpoints(app):
         nonlocal sessionUserName
         if request.method == "POST":
             user = request.form["nm"]
-            password = hashlib.blake2b(request.form["pwd"].encode()).hexdigest()
-            
+            password = hashlib.blake2b(
+                request.form["pwd"].encode()).hexdigest()
+
             if db.sign_in(user, password):
                 loggedIn = True
                 sessionUserName = user
@@ -93,7 +95,8 @@ def make_endpoints(app):
         nonlocal sessionUserName
         if request.method == "POST":
             user = request.form["nm"]
-            password = hashlib.blake2b(request.form["pwd"].encode()).hexdigest()
+            password = hashlib.blake2b(
+                request.form["pwd"].encode()).hexdigest()
             if db.sign_up(user, password):
                 loggedIn = True
                 sessionUserName = user
@@ -115,20 +118,19 @@ def make_endpoints(app):
                                    message="File uploaded successfully.")
         return render_template("upload.html")
 
-
     @app.route("/wikimusic", methods=["GET", "POST"])
     def wikiAPIRequest():
         if request.method == "POST":
             songname = request.form["songname"]
             artist = request.form["artist"]
             if songname == "" or artist == "":
-                return render_template("wikimusic_notfound.html");
+                return render_template("wikimusic_notfound.html")
 
             iframes = get_iframe_spotify_songs(songname, artist)
             articles = get_wikipedia_articles(songname + " " + artist)
             if len(articles) == 0:
-                return render_template("wikimusic_notfound.html");
+                return render_template("wikimusic_notfound.html")
             else:
-                return render_template("WikiMusicAnswer.html", articles = articles, iframes_spotify = iframes)            
+                return render_template("WikiMusicAnswer.html", articles=articles, iframes_spotify=iframes)
         else:
-            return render_template("WikiMusicAnswer.html", articles = articles, iframes_spotify = iframes)
+            return render_template("WikiMusicAnswer.html", articles=articles, iframes_spotify=iframes)
