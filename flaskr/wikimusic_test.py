@@ -8,7 +8,12 @@ def test_get_wikipedia_articles(mock_get_wikipedia_article):
     mock = MagicMock()
     mock.get.return_value = MagicMock()
     mock.get.return_value.json.return_value.__enter__.return_value = {
-        "query": {"search": {"title": "new song"}}}
+        "query": {
+            "search": {
+                "title": "new song"
+            }
+        }
+    }
 
     mock_get_wikipedia_article.return_value = "new article"
 
