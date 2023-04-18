@@ -16,6 +16,7 @@ def app():
 def client(app):
     return app.test_client()
 
+
 # TODO(Checkpoint (groups of 4 only) Requirement 4): Change test to
 # match the changes made in the other Checkpoint Requirements.
 
