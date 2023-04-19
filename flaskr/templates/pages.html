@@ -14,7 +14,7 @@
         otherwise, display the list of content for the user to choose from
     -->
     <div>
-        {% if page %}
+       {% if page %}
             <div class="content">
                 <p>{{page}}</p>
             </div>
@@ -35,12 +35,53 @@
 
             
         {% endif %}
+
+            </div>
+
+
+    <!-- Form for submitting a new comment -->
+    {%if not page %}
+    {%elif loggedIn and page %}
+        <form method="POST">
+            <textarea name="comment" class="comment-textarea" placeholder="Add a comment..." required></textarea>
+            <br>
+            <input type="submit" class="submit-button" value="Submit">
+        </form>
+
+    {% elif not loggedIn %}
+        <p>Please log in to leave a comment.</p>
+    {% endif %}
+    
+    {% if comments %}
+    <div class="comments">
+        <h2>Comments</h2>
+        {% for username, time, comment_text in comments %}
+            <div class="comment">
+                <p><strong>{{ username }}:</strong> {{ comment_text }}</p>
+            </div>
+        {% endfor %}
+
     </div>
+{% endif %}
 
 
 
     {% block css %}
     <style rel="stylesheet" type="text/css">
+    .comment-textarea {
+        width: 40rem;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .submit-button {
+        background-color: #5c78b8;
+        border: none;
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
         .intro{
             text-align: center;
             background-color: rgb(153, 153, 231);
@@ -97,7 +138,13 @@
         .content p{
             padding: 20px;
         }
-
+        form.comment-form {
+        margin: 0 auto;
+        width: 75%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
         
 
     </style>

@@ -64,3 +64,19 @@ def integration_wiki_page(client):
     assert resp.status_code == 200
     assert b"Super Mario Kart[a] is a kart racing game developed and published by Nintendo" in resp.get_data(
     )
+
+
+def test_current_page_comment(client):
+    # Test for an existing page
+    existing_page_path = "Sample_Page"
+    resp = client.get(f"/pages/{existing_page_path}")
+    assert resp.status_code == 200
+    assert b"Sample page content" in resp.get_data()
+
+    # Test comment submission
+    comment_text = "This is a test comment."
+    resp = client.post(f"/pages/{existing_page_path}",
+                       data={"comment": comment_text}, 
+                       follow_redirects=True)
+    assert resp.status_code == 200
+    assert bytes(comment_text, encoding='utf-8') in resp.get_data()

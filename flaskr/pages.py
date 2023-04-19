@@ -19,9 +19,9 @@ def make_endpoints(app):
         what value to send.
         """
         if loggedIn:
-            return {'loggeda': True, "userName": sessionUserName}
+            return {'loggedIn': True, "userName": sessionUserName}
         else:
-            return {'loggeda': False, "userName": ""}
+            return {'loggedIn': False, "userName": ""}
 
     # Flask uses the "app.route" decorator to call methods when users
     # go to a specific route on the project's website.
@@ -80,13 +80,21 @@ def make_endpoints(app):
         return render_template("pages.html", listPages=pages, page=page)
 
     #uses backend to obtain content of a certain page, sends the content when rendering pages.html
-    @app.route("/pages/<path>", methods=["GET"])
+    @app.route("/pages/<path>", methods=["GET", "POST"])
     def current_page(path):
         nonlocal loggedIn
         nonlocal sessionUserName
-        if loggedIn:
-            db.update_recent(path, sessionUserName)            
-        return render_template("pages.html", listPages=None, page=page)
+        page = db.get_wiki_page(path)
+
+        # Handle comment submission
+        if request.method == "POST":
+            comment = request.form["comment"]
+            db.add_comment(path, sessionUserName, comment)
+            return redirect(url_for('current_page', path=path))
+
+        # Get existing comments for the page
+        comments = db.get_comments(path)
+        return render_template('pages.html', page=page, comments=comments)
 
     @app.route("/about")
     def about():
@@ -144,3 +152,16 @@ def make_endpoints(app):
             return render_template("upload.html",
                                    message="File uploaded successfully.")
         return render_template("upload.html")
+
+    @app.route("/delete_comment", methods=["POST"])
+    def delete_comment():
+        page_name = request.form["page_name"]
+        username = request.form["username"]
+        datetime_str = request.form["datetime_str"]
+
+        #must wait for backend method in order to work
+        success = db.delete_comment(page_name, username, datetime_str)
+        if success:
+            return "Comment deleted successfully", 200
+        else:
+            return "Failed to delete comment", 400

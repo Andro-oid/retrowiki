@@ -58,6 +58,10 @@ class mock_blob:
         self.name = n
 
 
+    def open(self, mode):
+        return mock_open(read_data="test comment")()
+
+
 def test_user_exists():
     mock = MagicMock()
     blob = mock_blob("userName")
@@ -74,3 +78,23 @@ def test_get_image():
     mock.Client.return_value.bucket.return_value.blob.return_value.open.return_value.__enter__.return_value.read.return_value = expected_return
     db = Backend(mock)
     assert db.get_image("image.jpg") == expected_return
+
+
+@patch("flaskr.backend.Backend.user_exists")
+def test_add_comment(mock_user_exists):
+    mock_user_exists.return_value = True
+    mock = MagicMock()
+    db = Backend(mock)
+    db.add_comment("page1", "user1", "test comment")
+    mock.Client.return_value.bucket.return_value.blob.return_value.upload_from_string.assert_called_once_with(
+        "test comment")
+
+
+def test_get_comments():
+    mock = MagicMock()
+    mock.Client.return_value.bucket.return_value.list_blobs.return_value = [
+        mock_blob("page1/user1/2022-10-03_11-25-16")
+    ]
+    db = Backend(mock)
+    comments = db.get_comments("page1")
+    assert comments == [("user1", "2022-10-03_11-25-16", "test comment")]
