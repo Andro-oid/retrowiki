@@ -31,7 +31,7 @@ class Backend:
 
         Args:
             name: A string corresponding to the name of the wiki page (txt file).
-        
+
         Returns:
             The content of the wiki page as a string.
         """
@@ -64,7 +64,7 @@ class Backend:
         Attributes:
             username: string indicading the blob to look for.
             password: A string corresponding to the content of the blob.
-        
+
         Returns:
             A boolean value indicating if the hashed password matches the user
         """
@@ -72,7 +72,7 @@ class Backend:
             return False
 
         blob = self.bucket_users.blob(username)
-        #with self.writeUser( blob, "w") as f:
+        # with self.writeUser( blob, "w") as f:
         with blob.open("w") as f:
             f.write(password)
         return True
@@ -82,7 +82,7 @@ class Backend:
 
         Attributes:
             username: A string indicading the blob to look for.
-        
+
         Returns:
             A boolean value that indicates if the username is already registered.
         """
@@ -99,7 +99,7 @@ class Backend:
         Args:
             username: string corresponding to the username of the new user.
             password: A string corresponding to the hashed password of the new user.
-        
+
         Returns:
             A boolean value indicating if the user was successfully added.
         """
@@ -108,10 +108,10 @@ class Backend:
 
         blobUsers = self.bucket_users.blob(username)
 
-        #compare passwords
+        # compare passwords
         with blobUsers.open("r") as f:
             blobPassword = f.read()
-            #for line in blobPassword:
+            # for line in blobPassword:
             if blobPassword == password:
                 return True
         return False

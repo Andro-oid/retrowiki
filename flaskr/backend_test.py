@@ -6,12 +6,12 @@ import pytest
 # TODO(Project 1): Write tests for Backend methods.
 @patch("flaskr.backend.Backend.user_exists")
 def test_signin_matchPassword(mock_user_exists):
-    #we instanciate a mock so we can access its return value
+    # we instanciate a mock so we can access its return value
     mock = MagicMock()
-    #set the return value of a specific function
+    # set the return value of a specific function
     mock.Client.return_value.bucket.return_value.blob.return_value.open.return_value.__enter__.return_value.read.return_value = "123"
     #mock.Client.return_value.bucket.return_value.blob.return_value.__enter__.return_value.read.__iter__.return_value = ["123"]
-    #pass the mock as parameter
+    # pass the mock as parameter
     mock_user_exists.return_value = True
     db = Backend(mock)
     assert db.sign_in("usuario", "123") == True
@@ -28,7 +28,7 @@ def test_signin_noMatchPassword(mock_user_exists):
 
 @patch("flaskr.backend.Backend.user_exists")
 def test_signin_userDoesntExists(mock_user_exists):
-    #we instanciate a mock so we can access its return value
+    # we instanciate a mock so we can access its return value
     mock = MagicMock()
     mock.Client.return_value.bucket.return_value.blob.return_value.open.return_value.__enter__.return_value.read.return_value = "123"
     mock_user_exists.return_value = False
@@ -56,7 +56,6 @@ class mock_blob:
 
     def __init__(self, n):
         self.name = n
-
 
     def open(self, mode):
         return mock_open(read_data="test comment")()

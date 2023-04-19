@@ -66,6 +66,20 @@ def integration_wiki_page(client):
     )
 
 
+def integration_current_page(client):
+    resp = client.get('/pages/Super%20Mario%20Kart')
+    assert resp.status_code == 200
+    assert b'Super Mario Kart[a] is a kart racing game developed and published by Nintendo' in resp.data
+
+    resp = client.post('/pages/Super%20Mario%20Kart', data={
+        'comment': 'This is a test comment.'
+    }, follow_redirects=True)
+
+    # Check that the response status code is 200 and the comment is displayed in the page content
+    assert resp.status_code == 200
+    assert b'This is a test comment.' in resp.data
+
+
 def test_current_page_comment(client):
     # Test for an existing page
     existing_page_path = "Sample_Page"
@@ -76,7 +90,7 @@ def test_current_page_comment(client):
     # Test comment submission
     comment_text = "This is a test comment."
     resp = client.post(f"/pages/{existing_page_path}",
-                       data={"comment": comment_text}, 
+                       data={"comment": comment_text},
                        follow_redirects=True)
     assert resp.status_code == 200
     assert bytes(comment_text, encoding='utf-8') in resp.get_data()
