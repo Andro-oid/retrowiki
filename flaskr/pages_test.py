@@ -66,7 +66,6 @@ def integration_wiki_page(client):
     )
 
 
-
 def test_current_page_comment(client):
     # Test for an existing page
     existing_page_path = "Sample_Page"
@@ -76,6 +75,8 @@ def test_current_page_comment(client):
 
     # Test comment submission
     comment_text = "This is a test comment."
-    resp = client.post(f"/pages/{existing_page_path}", data={"comment": comment_text}, follow_redirects=True)
+    resp = client.post(f"/pages/{existing_page_path}",
+                       data={"comment": comment_text}, 
+                       follow_redirects=True)
     assert resp.status_code == 200
     assert bytes(comment_text, encoding='utf-8') in resp.get_data()

@@ -3,6 +3,7 @@ from google.cloud import storage
 from google.cloud.storage.blob import Blob
 from datetime import datetime
 
+
 class Backend:
 
     def __init__(self, st=storage):
@@ -13,10 +14,12 @@ class Backend:
         self.bucketName_images = "author_images"
         self.bucketName_comments = "comment--bucket"
 
-        self.bucket_content = self.storage_client.bucket(self.bucketName_content)
+        self.bucket_content = self.storage_client.bucket(
+            self.bucketName_content)
         self.bucket_users = self.storage_client.bucket(self.bucketName_users)
         self.bucket_images = self.storage_client.bucket(self.bucketName_images)
-        self.bucket_comments = self.storage_client.bucket(self.bucketName_comments)
+        self.bucket_comments = self.storage_client.bucket(
+            self.bucketName_comments)
 
         #self.readContent = opener
         #self.writeContent = opener
@@ -158,7 +161,7 @@ class Backend:
         blobs = self.bucket_comments.list_blobs(prefix=page_name)
         comments = []
         for blob in blobs:
-            username, datetime_str = blob.name[len(page_name)+1:].split("/")
+            username, datetime_str = blob.name[len(page_name) + 1:].split("/")
             with blob.open("r") as f:
                 comment = f.read()
                 comments.append((username, datetime_str, comment))

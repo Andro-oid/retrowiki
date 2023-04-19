@@ -56,9 +56,11 @@ class mock_blob:
 
     def __init__(self, n):
         self.name = n
-    
+
+
     def open(self, mode):
         return mock_open(read_data="test comment")()
+
 
 def test_user_exists():
     mock = MagicMock()
@@ -84,12 +86,15 @@ def test_add_comment(mock_user_exists):
     mock = MagicMock()
     db = Backend(mock)
     db.add_comment("page1", "user1", "test comment")
-    mock.Client.return_value.bucket.return_value.blob.return_value.upload_from_string.assert_called_once_with("test comment")
+    mock.Client.return_value.bucket.return_value.blob.return_value.upload_from_string.assert_called_once_with(
+        "test comment")
 
 
 def test_get_comments():
     mock = MagicMock()
-    mock.Client.return_value.bucket.return_value.list_blobs.return_value = [mock_blob("page1/user1/2022-10-03_11-25-16")]
+    mock.Client.return_value.bucket.return_value.list_blobs.return_value = [
+        mock_blob("page1/user1/2022-10-03_11-25-16")
+    ]
     db = Backend(mock)
     comments = db.get_comments("page1")
     assert comments == [("user1", "2022-10-03_11-25-16", "test comment")]
