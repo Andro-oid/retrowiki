@@ -22,6 +22,8 @@ def client(app):
 
 # TODO(Checkpoint (groups of 4 only) Requirement 4): Change test to
 # match the changes made in the other Checkpoint Requirements.
+
+
 def integration_home_page(client):
     resp = client.get("/")
     assert resp.status_code == 200
