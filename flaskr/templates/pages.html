@@ -6,107 +6,104 @@
  -->
 
 {% block content %}
-    <!--
+<!--
         jinja code to determine what page to display depending on whether or not the user has chosen a page
 
         if page isn't empty, the content is displayed
 
         otherwise, display the list of content for the user to choose from
     -->
-    <div>
-        {% if page %}
-            <div class="content">
-                <p>{{page}}</p>
-            </div>
-        {% else %}
-            <div class="intro">
-                <h1><b>Pages contained in this Wiki</b></h1>
-            </div>
-            
-            <div class="list">
-                <ul>
-                    {% for page in listPages %}
-                        <li>
-                            <a href="{{url_for('current_page', path=page)}}">{{page}}</a>
-                        </li>
-                    {% endfor %}     
-                </ul>
-            </div>
+<div>
+    {% if page %}
+    <div class="content">
+        <p>{{page}}</p>
+    </div>
+    {% else %}
+    <div class="intro">
+        <h1><b>Pages contained in this Wiki</b></h1>
+    </div>
 
-            
-        {% endif %}
+    <div class="list">
+        <ul>
+            {% for page in listPages %}
+            <li>
+                <a href="{{url_for('current_page', path=page)}}">{{page}}</a>
+            </li>
+            {% endfor %}
+        </ul>
     </div>
 
 
+    {% endif %}
+</div>
 
-    {% block css %}
-    <style rel="stylesheet" type="text/css">
-        .intro{
-            text-align: center;
-            background-color: rgb(153, 153, 231);
-            display: flex;
-            flex-direction: column;
-            border-radius: 2rem;
-            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
-            width: 30rem;
-            margin: 4rem auto;
-        }
 
-        .content{
-            text-align: center;
-            background-color: rgb(176, 176, 231);
-            display: flex;
-            flex-direction: column;
-            border-radius: 2rem;
-            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
-            width: 75%;
-            margin: 4rem auto;
-        }
 
-        .list{
-            text-align: center;
-            background-color: rgb(176, 176, 231);
-            display: flex;
-            flex-direction: column;
-            border-radius: 2rem;
-            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
-            width: 20rem;
-            margin: 4rem auto;
-            padding-right: 35px;
-        }
+{% block css %}
+<style rel="stylesheet" type="text/css">
+    .intro {
+        text-align: center;
+        background-color: rgb(153, 153, 231);
+        display: flex;
+        flex-direction: column;
+        border-radius: 2rem;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
+        width: 30rem;
+        margin: 4rem auto;
+    }
 
-        .list ul{
-            list-style-type: none;
-        }
+    .content {
+        text-align: center;
+        background-color: rgb(176, 176, 231);
+        display: flex;
+        flex-direction: column;
+        border-radius: 2rem;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
+        width: 75%;
+        margin: 4rem auto;
+    }
 
-        .list li{
-            width: fit-content;
-            margin: auto;
-        }
+    .list {
+        text-align: center;
+        background-color: rgb(176, 176, 231);
+        display: flex;
+        flex-direction: column;
+        border-radius: 2rem;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
+        width: 20rem;
+        margin: 4rem auto;
+        padding-right: 35px;
+    }
 
-        .list li:hover{
-            background-color: rgb(153, 153, 231);
-        }
+    .list ul {
+        list-style-type: none;
+    }
 
-        .list a{
-            font-size: large;            
-            text-decoration: none;
-            color: inherit;
-        }
+    .list li {
+        width: fit-content;
+        margin: auto;
+    }
 
-        .content p{
-            padding: 20px;
-        }
+    .list li:hover {
+        background-color: rgb(153, 153, 231);
+    }
 
-        
+    .list a {
+        font-size: large;
+        text-decoration: none;
+        color: inherit;
+    }
 
-    </style>
-    {% endblock css %}
-    
-    {% block javascript %}
-        <script type="text/javascript">
-            
-        </script>
-    {% endblock javascript %}
-    
+    .content p {
+        padding: 20px;
+    }
+</style>
+{% endblock css %}
+
+{% block javascript %}
+<script type="text/javascript">
+
+</script>
+{% endblock javascript %}
+
 {% endblock content %}
