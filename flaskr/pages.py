@@ -3,6 +3,7 @@ from flask import request
 from flaskr.backend import Backend
 import hashlib
 from google.cloud import storage
+from .wikimusic import get_wikipedia_articles, get_iframe_spotify_songs
 
 
 def make_endpoints(app):
@@ -93,6 +94,7 @@ def make_endpoints(app):
         nonlocal sessionUserName
         if request.method == "POST":
             user = request.form["nm"]
+            #password = hashlib.blake2b(request.form["pwd"].encode()).hexdigest()
             password = hashlib.blake2b(request.form["pwd"].encode()).hexdigest()
             if db.sign_up(user, password):
                 loggedIn = True
@@ -117,14 +119,20 @@ def make_endpoints(app):
 
     @app.route("/wikimusic", methods=["GET", "POST"])
     def wikiAPIRequest():
-        songname = request.form["songname"]
-        artist = request.form["artist"]
-        if songname == "" or artist == "":
-            return render_template("wikimusic_notfound.html")
+        if request.method == "POST":
+            songname = request.form["songname"]
+            artist = request.form["artist"]
+            if songname == "" or artist == "":
+                return render_template("wikimusic_notfound.html")
 
-        iframes = get_iframe_spotify_songs(songname, artist)
-        articles = get_wikipedia_articles(songname + " " + artist)
+            iframes = get_iframe_spotify_songs(songname, artist)
+            articles = get_wikipedia_articles(songname + " " + artist)
 
-        return render_template("WikiMusicAnswer.html", 
-                               articles=articles, 
-                               iframes_spotify=iframes)
+            if len(articles) == 0:
+                return render_template("wikimusic_notfound.html")
+            else:
+                return render_template("WikiMusicAnswer.html",
+                                       articles=articles,
+                                       iframes_spotify=iframes)
+        else:
+            return render_template("WikiMusicStart.html")

@@ -1,34 +1,20 @@
-{% block content %}
-<div id="navContainer" class="navContainer">
-    <ul id="navMenu" class="navMenu">
-        <li id="navMenu_home" class="navMenu_button"><a class="navMenu_text" id="navMenu_text"> Home</a></li>
-        <li id="navMenu_About" class="navMenu_button"><a class="navMenu_text" id="navMenu_text"> About</a></li>
-        <li id="navMenu_Pages" class="navMenu_button"><a class="navMenu_text" id="navMenu_text"> Pages</a></li>
-        <li id="navMenu_Upload" class="navMenu_button"><a class="navMenu_text" id="navMenu_text"> Upload</a></li>
-        <li id="navMenu_Logout" class="navMenu_button"><a class="navMenu_text" id="navMenu_text"> Logout</a></li>
-        <li id="userName" class="userName">{{userName}}</li>
-    </ul>
-</div>
+{% block content %} 
+        <div id="navContainer" class="navContainer">
+            <ul id="navMenu" class="navMenu">
+                <li id="navMenu_home" class="navMenu_button" ><a class="navMenu_text" id="navMenu_text">    Home</a></li>
+                <li id="navMenu_About" class="navMenu_button" ><a class="navMenu_text" id="navMenu_text">   About</a></li>
+                <li id="navMenu_Pages" class="navMenu_button" ><a class="navMenu_text" id="navMenu_text">   Pages</a></li>
+                <li id="navMenu_Upload" class="navMenu_button" ><a class="navMenu_text" id="navMenu_text">  Upload</a></li>
+                <li id="navMenu_Wikimusic" class="navMenu_button" ><a class="navMenu_text" id="navMenu_text">  Wikimusic</a></li>
+                <li id="navMenu_Logout" class="navMenu_button" ><a class="navMenu_text" id="navMenu_text">  Logout</a></li>
+                <li id="userName" class="userName" >{{userName}}</li>
+            </ul>   
+        </div>
 
-{% block css %}
-<style rel="stylesheet" type="text/css">
-    .navMenu_button:hover {
-        background-color: rgb(153, 153, 231);
-    }
-
-        {
-        % block javascript %
-    }
-
-    <script type="text/javascript">window.addEventListener('load', function () {
-            document.getElementById("navMenu_home").onclick=function () {
-                location.href="/";
-            }
-
-            ;
-
-            document.getElementById("navMenu_About").onclick=function () {
-                location.href="/about";
+    {% block css %}
+        <style rel="stylesheet" type="text/css">
+            .navMenu_button:hover{
+                background-color: rgb(153, 153, 231);
             }
 
             ;
@@ -48,6 +34,37 @@
             document.getElementById("navMenu_Logout").onclick=function () {
                 location.href="/logout";
             }
+        </style>
+    {% endblock css %}
+
+    {% block javascript %}
+        <script type="text/javascript">
+            window.addEventListener('load', function () {            
+                document.getElementById("navMenu_home").onclick = function () {
+                    location.href = "/";
+                };
+                document.getElementById("navMenu_About").onclick = function () {
+                    location.href = "/about";
+                };
+                document.getElementById("navMenu_Pages").onclick = function () {
+                    location.href = "/pages";
+                };
+                document.getElementById("navMenu_Upload").onclick = function () {
+                    location.href = "upload";
+                };
+                document.getElementById("navMenu_Logout").onclick = function () {
+                    location.href = "/logout";
+                };
+                document.getElementById("navMenu_Wikimusic").onclick = function () {
+                    location.href = "/wikimusic";
+                };
+            })
+        </script>
+    {% endblock javascript %}
+
+
+
+{% endblock content %}
 
             ;
         }

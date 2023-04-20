@@ -15,8 +15,7 @@ def get_wikipedia_articles(songName, r=requests):
 
 
 def get_wikipedia_article(search, r=requests):
-    fullSearch = "https://en.wikipedia.org/w/api.php?action=query&titles="+search + \
-        "&prop=extracts|pageimages|info&pithumbsize=400&inprop=url&redirects=&format=json&origin=*"
+    fullSearch = "https://en.wikipedia.org/w/api.php?action=query&titles=" + search + "&prop=extracts|pageimages|info&pithumbsize=400&inprop=url&redirects=&format=json&origin=*"
     request = r.get(fullSearch).json()
     articles = {}
     for key, value in request['query']['pages'].items():
