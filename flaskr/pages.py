@@ -2,6 +2,7 @@ from flask import render_template, redirect, url_for
 from flask import request
 from flaskr.backend import Backend
 import hashlib
+import os
 from google.cloud import storage
 from .wikimusic import get_wikipedia_articles, get_iframe_spotify_songs
 
@@ -42,7 +43,36 @@ def make_endpoints(app):
         # to render main.html on the home page.
         return f"<h1>{usr}</h1> <h2>{pwd}<h2>"
 
-    # uses backend to obtain list of wiki content, sends that list when rendering pages.html
+    @app.route("/profile", methods=["GET", "POST"])
+    def profile():
+        nonlocal loggedIn
+        nonlocal sessionUserName
+        
+        if request.method == "POST":
+
+            if "pfpUpload" in request.files:
+                uploaded_pfp = request.files["pfpUpload"]
+                if uploaded_pfp.filename != "":
+                    uploaded_pfp.save(os.path.join('flaskr/static/avatars', sessionUserName + ".png"))
+                    db.upload_profile_picture(os.path.relpath("flaskr/static/avatars/" + sessionUserName + ".png"), sessionUserName)
+                    
+
+            if "bioUpload" in request.form:
+                uploaded_bio = request.form["bioUpload"]
+                db.upload_user_bio(uploaded_bio, sessionUserName)
+            
+            profile_picture = db.get_user_profile_picture(sessionUserName)
+            bio = db.get_user_bio(sessionUserName)
+            recently_viewed = db.get_recently_viewed(sessionUserName)
+            return render_template("profile.html", profile_pic=profile_picture, profile_bio = bio)
+        
+        profile_picture = db.get_user_profile_picture(sessionUserName)
+        bio = db.get_user_bio(sessionUserName)
+        recently_viewed = db.get_recently_viewed(sessionUserName)
+        return render_template("profile.html", profile_pic=profile_picture, profile_bio = bio)
+    
+
+    #uses backend to obtain list of wiki content, sends that list when rendering pages.html
     @app.route("/pages", methods=["GET"])
     def pages(page=None):
         nonlocal loggedIn
@@ -55,7 +85,8 @@ def make_endpoints(app):
     def current_page(path):
         nonlocal loggedIn
         nonlocal sessionUserName
-        page = db.get_wiki_page(path)
+        if loggedIn:
+            db.update_recent(path, sessionUserName)            
         return render_template("pages.html", listPages=None, page=page)
 
     @app.route("/about")

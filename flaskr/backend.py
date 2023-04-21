@@ -1,26 +1,67 @@
 # TODO(Project 1): Implement Backend according to the requirements.
+import json
+import os
+
 from google.cloud import storage
 from google.cloud.storage.blob import Blob
-
+from google.oauth2 import service_account
+from datetime import timezone, datetime
 
 class Backend:
 
     def __init__(self, st=storage):
-        self.storage_client = st.Client()
+
+        with open('google_cloud_auth.json') as source:
+            info = json.load(source)
+
+        storage_credentials = service_account.Credentials.from_service_account_info(info)
+
+        self.storage_client = st.Client(credentials=storage_credentials)
 
         self.bucketName_content = "group_wiki_content"
         self.bucketName_users = "users_and_passwords"
         self.bucketName_images = "author_images"
+        self.bucketName_profile_pictures = "wiki_viewer_user_data"
 
-        self.bucket_content = self.storage_client.bucket(
-            self.bucketName_content)
+        self.bucket_content = self.storage_client.bucket(self.bucketName_content)
         self.bucket_users = self.storage_client.bucket(self.bucketName_users)
         self.bucket_images = self.storage_client.bucket(self.bucketName_images)
+        self.bucket_profile_pictures = self.storage_client.bucket(self.bucketName_profile_pictures)
         #self.readContent = opener
         #self.writeContent = opener
         #self.readUser = opener
         #self.writeUser = opener
 
+    def get_user_profile_picture(self, username):      
+        blob = self.bucket_profile_pictures.blob("profile_pictures/" + username)
+        blob.content_type = "image/png"
+        url_lifetime = int(datetime.now(tz=timezone.utc).timestamp()) + 3600
+        if blob.exists():
+            return blob.generate_signed_url(expiration=url_lifetime, method="GET")
+        else:
+            return "https://storage.googleapis.com/author_images/Default.png"
+        
+        
+    def upload_profile_picture(self, path, name):
+        blob = self.bucket_profile_pictures.blob("profile_pictures/" + name)
+        blob.content_type = "image/png"
+        blob.cache_control = 0
+        blob.upload_from_filename(path)
+
+    def get_user_bio(self, username):
+        blob = self.bucket_profile_pictures.blob("bios/" + username)
+        if blob.exists():
+            with blob.open("r") as f:
+                return (f.read())
+        else:
+            return None
+
+    def upload_user_bio(self, text, name):
+        blob = self.bucket_profile_pictures.blob("bios/" + name)
+        blob.cache_control = 0
+        with blob.open("w") as user:
+            user.write(text)            
+        
     def get_wiki_page(self, name):
         """ This method gets the content of a given wiki page from the content bucket.
 
@@ -127,3 +168,33 @@ class Backend:
             print(f.read())
             image = f.read()
         return image
+
+
+    def get_recently_viewed(self, username):
+        blob = self.bucket_profile_pictures.blob("recently_viewed/" + username)
+        blob.content_type = ".json"
+        
+        if blob.exists():
+            data = json.loads(blob.download_as_string())
+            return [data["Recent"]["First"], data["Recent"]["Second"], data["Recent"]["Third"]]
+                
+        else:
+            blob.cache_control = 0
+            blob.upload_from_filename("flaskr/static/default/recent.json")
+            return ["None", "None", "None"]
+
+    def update_recent(self, page, username):    
+        blob = self.bucket_profile_pictures.blob("recently_viewed/" + username)
+        blob.content_type = ".json"
+
+        with blob.open("r") as recent:
+            data = json.load(recent)
+            recent.close()
+
+        data["Recent"]["Third"] = data["Recent"]["Second"]
+        data["Recent"]["Second"] = data["Recent"]["First"]
+        data["Recent"]["First"] = page
+
+        with blob.open("w") as recent:
+            recent.write(json.dumps(data))
+            recent.close()
