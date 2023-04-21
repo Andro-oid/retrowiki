@@ -7,7 +7,6 @@
             display: flex;
             flex-direction: column;
             border-radius: 2rem;
-            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
             width: 85%;
             margin: 4rem auto;
             height: auto;
@@ -56,10 +55,6 @@
             border-radius: 2rem; 
         }
 
-        .bio-upload{
-            
-        }
-
         .pfp-upload{
             writing-mode: horizontal-tb;
             padding-left: 0;
@@ -84,6 +79,10 @@
                 border-radius: 20px;
                 margin: 30px 0;
         }  
+
+        .recently-viewed h2{
+            margin-left: 20px;            
+        }
     </style>
 
     <body>
@@ -124,8 +123,9 @@
                 </div>
             </div>
             
-            <div id="sub-info" class="sub-info">
-                <div id="recently-viewed">
+            <div class="sub-info">
+                <div class="recently-viewed">
+                    <h2>Recently Viewed Pages</h2>
                     <ul>
                         {% for page in recent %}
                             <li>

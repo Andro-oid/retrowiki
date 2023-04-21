@@ -175,9 +175,11 @@ class Backend:
         blob.content_type = ".json"
         
         if blob.exists():
-            data = json.loads(blob.download_as_string())
+            with blob.open("r") as recent:
+                data = json.load(recent)
+                print(data)
+                recent.close()
             return [data["Recent"]["First"], data["Recent"]["Second"], data["Recent"]["Third"]]
-                
         else:
             blob.cache_control = 0
             blob.upload_from_filename("flaskr/static/default/recent.json")
