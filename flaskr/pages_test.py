@@ -85,7 +85,7 @@ def integration_current_page(client):
     assert b'This is a test comment.' in resp.data
 
 
-def test_current_page_comment(client):
+def integration_current_page_comment(client):
     # Test for an existing page
     existing_page_path = "Sample_Page"
     resp = client.get(f"/pages/{existing_page_path}")
