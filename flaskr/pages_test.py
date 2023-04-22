@@ -76,9 +76,9 @@ def integration_current_page(client):
     assert resp.status_code == 200
     assert b'Super Mario Kart[a] is a kart racing game developed and published by Nintendo' in resp.data
 
-    resp = client.post('/pages/Super%20Mario%20Kart', data={
-        'comment': 'This is a test comment.'
-    }, follow_redirects=True)
+    resp = client.post('/pages/Super%20Mario%20Kart',
+                       data={'comment': 'This is a test comment.'},
+                       follow_redirects=True)
 
     # Check that the response status code is 200 and the comment is displayed in the page content
     assert resp.status_code == 200
@@ -108,8 +108,11 @@ def integration_wiki_wikimusic_startpage(client):
 
 
 def integration_wiki_wikimusic_post_Correct(client):
-    resp = client.post(
-        "/wikimusic", data={"artist": "beatles", "songname": "yesterday"})
+    resp = client.post("/wikimusic",
+                       data={
+                           "artist": "beatles",
+                           "songname": "yesterday"
+                       })
     print(resp)
     assert resp.status_code == 200
     assert b"Yesterday (Beatles song)" in resp.get_data()
