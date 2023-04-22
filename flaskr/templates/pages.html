@@ -7,12 +7,12 @@
 
 {% block content %}
 <!--
-        jinja code to determine what page to display depending on whether or not the user has chosen a page
+     jinja code to determine what page to display depending on whether or not the user has chosen a page
 
-        if page isn't empty, the content is displayed
+     if page isn't empty, the content is displayed
 
-        otherwise, display the list of content for the user to choose from
-    -->
+     otherwise, display the list of content for the user to choose from
+ -->
 <div>
     {% if page %}
     <div class="content">
@@ -59,6 +59,30 @@
     <div class="comment">
         <p><strong>{{ username }}:</strong> {{ comment_text }}</p>
     </div>
+    <script src="main.html"> </script>
+    {% if loggedIn %}
+    <button onclick="deleteComment('{{ page_name }}', '{{ username }}', '{{ time }}')">Delete</button>
+
+    <script>
+        async function deleteComment(path, username, datetimeStr) {
+            const response = await fetch("/delete_comment", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: `page_name=${path}&username=${username}&datetime_str=${datetimeStr}`,
+            });
+
+            if (response.ok) {
+                alert("Comment deleted successfully");
+                // Refresh the comments or reload the page
+            } else {
+                alert("Failed to delete comment");
+            }
+        }
+    </script>
+    {% endif %}
+    </script>
     {% endfor %}
 
 </div>

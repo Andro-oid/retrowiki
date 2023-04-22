@@ -166,3 +166,24 @@ class Backend:
                 comment = f.read()
                 comments.append((username, datetime_str, comment))
         return comments
+
+
+def delete_comment(self, page_name, username, datetime_str):
+    """
+    Delete a comment from the comments bucket for the specified wiki page.
+
+    Args:
+        page_name: A string corresponding to the name of the wiki page.
+        username: A string corresponding to the name of the user who posted the comment.
+        datetime_str: A string corresponding to the timestamp of the comment.
+
+    Returns:
+        A boolean indicating whether the deletion was successful.
+    """
+    blob_name = f"{page_name}/{username}/{datetime_str}"
+    blob = self.bucket_comments.blob(blob_name)
+    if not blob.exists():
+        return False
+
+    blob.delete()
+    return True

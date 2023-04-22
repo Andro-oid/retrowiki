@@ -64,7 +64,7 @@ def make_endpoints(app):
 
         # Get existing comments for the page
         comments = db.get_comments(path)
-        return render_template('pages.html', page=page, comments=comments)
+        return render_template('pages.html', page=page, page_name=path, comments=comments)
 
     @app.route("/about")
     def about():
