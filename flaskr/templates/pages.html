@@ -60,7 +60,7 @@
         <p><strong>{{ username }}:</strong> {{ comment_text }}</p>
     </div>
     <script src="main.html"> </script>
-    {% if loggedIn %}
+    {% if loggedIn and userName == username %}
     <button onclick="deleteComment('{{ page_name }}', '{{ username }}', '{{ time }}')">Delete</button>
 
     <script>

@@ -1,5 +1,8 @@
 from flaskr import create_app
 import pytest
+from unittest.mock import patch, mock_open, MagicMock
+from flask import request
+import json
 
 
 # See https://flask.palletsprojects.com/en/2.2.x/testing/
@@ -19,6 +22,8 @@ def client(app):
 
 # TODO(Checkpoint (groups of 4 only) Requirement 4): Change test to
 # match the changes made in the other Checkpoint Requirements.
+
+
 def integration_home_page(client):
     resp = client.get("/")
     assert resp.status_code == 200
@@ -94,3 +99,24 @@ def test_current_page_comment(client):
                        follow_redirects=True)
     assert resp.status_code == 200
     assert bytes(comment_text, encoding='utf-8') in resp.get_data()
+
+
+def integration_wiki_wikimusic_startpage(client):
+    resp = client.get("/wikimusic")
+    assert resp.status_code == 200
+    assert b"(Re)search for a song!" in resp.get_data()
+
+
+def integration_wiki_wikimusic_post_Correct(client):
+    resp = client.post(
+        "/wikimusic", data={"artist": "beatles", "songname": "yesterday"})
+    print(resp)
+    assert resp.status_code == 200
+    assert b"Yesterday (Beatles song)" in resp.get_data()
+
+
+def integration_wiki_wikimusic_post_EmptyAnswer(client):
+    resp = client.post("/wikimusic", data={"artist": "", "songname": ""})
+    print(resp)
+    assert resp.status_code == 200
+    assert b"SONG NOT FOUND" in resp.get_data()

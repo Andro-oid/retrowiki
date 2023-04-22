@@ -6,6 +6,7 @@ lint:
         - yapf --style google --recursive --diff .
     only:
         - merge_requests
+        - safebranch2
         
 
 unittest:
@@ -17,6 +18,7 @@ unittest:
         - pytest
     only:
         - merge_requests
+        - safebranch2
 
 prod:
     image: google/cloud-sdk:alpine
@@ -26,7 +28,8 @@ prod:
     environment: Production
     only:
         - merge_requests
+        - safebranch2
     script:
         - echo $SERVICE_ACCOUNT > /tmp/$CI_PIPELINE_ID.json
-        - gcloud auth activate-service-account --key-file /tmp $CI_PIPELINE_ID.json
+        - gcloud auth activate-service-account --key-file /tmp/$CI_PIPELINE_ID.json
         - gcloud app deploy --quiet --project $PROJECT_ID

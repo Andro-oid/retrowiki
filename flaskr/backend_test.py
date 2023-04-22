@@ -97,3 +97,20 @@ def test_get_comments():
     db = Backend(mock)
     comments = db.get_comments("page1")
     assert comments == [("user1", "2022-10-03_11-25-16", "test comment")]
+
+
+def test_get_user_profile_picture_blob_exists():
+    mock = MagicMock()
+    mock.Client.return_value.bucket.return_value.blob.return_value.exists.return_value = True
+    mock.Client.return_value.bucket.return_value.blob.return_value.generate_signed_url.return_value = "https://example.com/signed_url"
+    db = Backend(mock)
+    result = db.get_user_profile_picture("username")
+    assert result == "https://example.com/signed_url"
+
+
+def test_get_user_profile_picture_blob_doesnt_exist():
+    mock = MagicMock()
+    mock.Client.return_value.bucket.return_value.blob.return_value.exists.return_value = False
+    db = Backend(mock)
+    result = db.get_user_profile_picture("username")
+    assert result == "https://storage.googleapis.com/author_images/Default.png"

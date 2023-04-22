@@ -2,7 +2,9 @@ from flask import render_template, redirect, url_for
 from flask import request
 from flaskr.backend import Backend
 import hashlib
+import os
 from google.cloud import storage
+from .wikimusic import get_wikipedia_articles, get_iframe_spotify_songs
 
 
 def make_endpoints(app):
@@ -13,7 +15,7 @@ def make_endpoints(app):
     @app.context_processor
     def inject_now():
         """
-        This variables are known are send to all templated when used. 
+        This variables are known are send to all templated when used.
         Their value cannot be modified. Instead, we use a condition to decide
         what value to send.
         """
@@ -41,7 +43,37 @@ def make_endpoints(app):
         # to render main.html on the home page.
         return f"<h1>{usr}</h1> <h2>{pwd}<h2>"
 
+    @app.route("/profile", methods=["GET", "POST"])
+    def profile():
+        nonlocal loggedIn
+        nonlocal sessionUserName
+
+        if request.method == "POST":
+
+            if "pfpUpload" in request.files:
+                uploaded_pfp = request.files["pfpUpload"]
+                if uploaded_pfp.filename != "":
+                    uploaded_pfp.save(os.path.join(
+                        'flaskr/static/avatars', sessionUserName + ".png"))
+                    db.upload_profile_picture(os.path.relpath(
+                        "flaskr/static/avatars/" + sessionUserName + ".png"), sessionUserName)
+
+            if "bioUpload" in request.form:
+                uploaded_bio = request.form["bioUpload"]
+                db.upload_user_bio(uploaded_bio, sessionUserName)
+
+            profile_picture = db.get_user_profile_picture(sessionUserName)
+            bio = db.get_user_bio(sessionUserName)
+            recently_viewed = db.get_recently_viewed(sessionUserName)
+            return render_template("profile.html", profile_pic=profile_picture, profile_bio=bio, recent=recently_viewed)
+
+        profile_picture = db.get_user_profile_picture(sessionUserName)
+        bio = db.get_user_bio(sessionUserName)
+        recently_viewed = db.get_recently_viewed(sessionUserName)
+        return render_template("profile.html", profile_pic=profile_picture, profile_bio=bio, recent=recently_viewed)
+
     # uses backend to obtain list of wiki content, sends that list when rendering pages.html
+
     @app.route("/pages", methods=["GET"])
     def pages(page=None):
         nonlocal loggedIn
@@ -64,8 +96,9 @@ def make_endpoints(app):
 
         # Get existing comments for the page
         comments = db.get_comments(path)
-        return render_template('pages.html', page=page, page_name=path, comments=comments)
-
+        return render_template('pages.html', page=page, comments=comments)
+    
+    
     @app.route("/about")
     def about():
         nonlocal loggedIn
@@ -87,6 +120,7 @@ def make_endpoints(app):
             user = request.form["nm"]
             password = hashlib.blake2b(
                 request.form["pwd"].encode()).hexdigest()
+
             if db.sign_in(user, password):
                 loggedIn = True
                 sessionUserName = user
@@ -137,3 +171,23 @@ def make_endpoints(app):
             return "Comment deleted successfully", 200
         else:
             return "Failed to delete comment", 400
+
+    @app.route("/wikimusic", methods=["GET", "POST"])
+    def wikiAPIRequest():
+        if request.method == "POST":
+            songname = request.form["songname"]
+            artist = request.form["artist"]
+            if songname == "" or artist == "":
+                return render_template("wikimusic_notfound.html")
+
+            iframes = get_iframe_spotify_songs(songname, artist)
+            articles = get_wikipedia_articles(songname + " " + artist)
+
+            if len(articles) == 0:
+                return render_template("wikimusic_notfound.html")
+            else:
+                return render_template("WikiMusicAnswer.html",
+                                       articles=articles,
+                                       iframes_spotify=iframes)
+        else:
+            return render_template("WikiMusicStart.html")
