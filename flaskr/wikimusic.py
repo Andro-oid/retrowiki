@@ -7,10 +7,9 @@ import json
 def get_wikipedia_articles(songName, r=requests):
     articles = f'https://en.wikipedia.org/w/api.php?action=query&list=search&prop=info&inprop=url&utf8=&format=json&srlimit=20&srsearch={songName}&origin=*'
     req = r.get(articles).json()
-
     articles = []
-    for key in req['query']['search']:
-        articles.append(get_wikipedia_article(key["title"]))
+    for options in req['query']['search']:
+        articles.append(get_wikipedia_article(options["title"]))
     return articles
 
 

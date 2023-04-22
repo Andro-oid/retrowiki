@@ -53,10 +53,13 @@ def make_endpoints(app):
             if "pfpUpload" in request.files:
                 uploaded_pfp = request.files["pfpUpload"]
                 if uploaded_pfp.filename != "":
-                    uploaded_pfp.save(os.path.join(
-                        'flaskr/static/avatars', sessionUserName + ".png"))
-                    db.upload_profile_picture(os.path.relpath(
-                        "flaskr/static/avatars/" + sessionUserName + ".png"), sessionUserName)
+                    uploaded_pfp.save(
+                        os.path.join('flaskr/static/avatars',
+                                     sessionUserName + ".png"))
+                    db.upload_profile_picture(
+                        os.path.relpath("flaskr/static/avatars/" +
+                                        sessionUserName + ".png"),
+                        sessionUserName)
 
             if "bioUpload" in request.form:
                 uploaded_bio = request.form["bioUpload"]
@@ -65,12 +68,18 @@ def make_endpoints(app):
             profile_picture = db.get_user_profile_picture(sessionUserName)
             bio = db.get_user_bio(sessionUserName)
             recently_viewed = db.get_recently_viewed(sessionUserName)
-            return render_template("profile.html", profile_pic=profile_picture, profile_bio=bio, recent=recently_viewed)
+            return render_template("profile.html",
+                                   profile_pic=profile_picture,
+                                   profile_bio=bio,
+                                   recent=recently_viewed)
 
         profile_picture = db.get_user_profile_picture(sessionUserName)
         bio = db.get_user_bio(sessionUserName)
         recently_viewed = db.get_recently_viewed(sessionUserName)
-        return render_template("profile.html", profile_pic=profile_picture, profile_bio=bio, recent=recently_viewed)
+        return render_template("profile.html",
+                               profile_pic=profile_picture,
+                               profile_bio=bio,
+                               recent=recently_viewed)
 
     # uses backend to obtain list of wiki content, sends that list when rendering pages.html
 
@@ -97,8 +106,7 @@ def make_endpoints(app):
         # Get existing comments for the page
         comments = db.get_comments(path)
         return render_template('pages.html', page=page, comments=comments)
-    
-    
+
     @app.route("/about")
     def about():
         nonlocal loggedIn
@@ -118,8 +126,7 @@ def make_endpoints(app):
         nonlocal sessionUserName
         if request.method == "POST":
             user = request.form["nm"]
-            password = hashlib.blake2b(
-                request.form["pwd"].encode()).hexdigest()
+            password = hashlib.blake2b(request.form["pwd"].encode()).hexdigest()
 
             if db.sign_in(user, password):
                 loggedIn = True
@@ -136,8 +143,7 @@ def make_endpoints(app):
         nonlocal sessionUserName
         if request.method == "POST":
             user = request.form["nm"]
-            password = hashlib.blake2b(
-                request.form["pwd"].encode()).hexdigest()
+            password = hashlib.blake2b(request.form["pwd"].encode()).hexdigest()
             if db.sign_up(user, password):
                 loggedIn = True
                 sessionUserName = user
